@@ -1,0 +1,253 @@
+# === БЛОК РОЗЕТОК ЗОНЫ ОТДЫХА ===
+wall_outlet: Стеновой блок розеток {
+  shape: rectangle
+  style: {
+    stroke: "#333333"
+    fill: "#F5F5F5"
+    stroke-width: 2
+  }
+
+  power_group: Электропитание 220V {
+    outlet_tv: Розетка 220V Телевизор/Xbox {
+      style: {
+        fill: "#FFEB3B"
+        stroke: "#333333"
+      }
+    }
+
+    outlet_amp: Розетка 220V Усилитель Marantz {
+      style: {
+        fill: "#FFEB3B"
+        stroke: "#333333"
+      }
+    }
+
+    outlet_reserve: Розетка 220V Резервная {
+      style: {
+        fill: "#FFEB3B"
+        stroke: "#333333"
+      }
+    }
+  }
+
+  low_current_group: Слаботочные подключения {
+    ethernet: Ethernet Gigabit {
+      style: {
+        fill: "#2196F3"
+        stroke: "#333333"
+      }
+    }
+
+    hdmi_in: HDMI IN ARC/eARC {
+      style: {
+        fill: "#FF5722"
+        stroke: "#333333"
+      }
+    }
+
+    hdmi_out: HDMI OUT {
+      style: {
+        fill: "#FF5722"
+        stroke: "#333333"
+      }
+    }
+
+    optical: Optical Toslink {
+      style: {
+        fill: "#9C27B0"
+        stroke: "#333333"
+      }
+    }
+
+    rca: RCA Audio {
+      style: {
+        fill: "#795548"
+        stroke: "#333333"
+      }
+    }
+
+    usb_c: USB-C PD {
+      style: {
+        fill: "#4CAF50"
+        stroke: "#333333"
+      }
+    }
+  }
+}
+
+# === ОБОРУДОВАНИЕ ===
+tv: Телевизор OLED 65 дюймов {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#333333"
+  }
+}
+
+xbox: Xbox Series X {
+  style: {
+    fill: "#107C10"
+    stroke: "#333333"
+  }
+}
+
+nvidia_shield: NVIDIA Shield TV Pro {
+  style: {
+    fill: "#76FF03"
+    stroke: "#333333"
+  }
+}
+
+apple_tv: Apple TV 4K {
+  style: {
+    fill: "#000000"
+    stroke: "#333333"
+  }
+}
+
+marantz: Marantz PM8006 Стереоусилитель {
+  style: {
+    fill: "#FF9800"
+    stroke: "#333333"
+  }
+}
+
+speaker_left: Левая колонка KEF LS50 {
+  style: {
+    fill: "#607D8B"
+    stroke: "#333333"
+  }
+}
+
+speaker_right: Правая колонка KEF LS50 {
+  style: {
+    fill: "#607D8B"
+    stroke: "#333333"
+  }
+}
+
+phone: Смартфон/Планшет
+
+# === ПОДКЛЮЧЕНИЯ ПИТАНИЯ 220V ===
+wall_outlet.power_group.outlet_tv -> tv
+wall_outlet.power_group.outlet_tv -> xbox
+wall_outlet.power_group.outlet_amp -> marantz
+wall_outlet.power_group.outlet_reserve -> nvidia_shield
+wall_outlet.power_group.outlet_reserve -> apple_tv
+
+# === HDMI ПОДКЛЮЧЕНИЯ ===
+wall_outlet.low_current_group.hdmi_out -> tv: HDMI 2.1
+xbox -> wall_outlet.low_current_group.hdmi_out: HDMI 2.1
+nvidia_shield -> wall_outlet.low_current_group.hdmi_out: HDMI 2.0
+apple_tv -> wall_outlet.low_current_group.hdmi_out: HDMI 2.0
+
+# === АУДИО ПОДКЛЮЧЕНИЯ ===
+tv -> wall_outlet.low_current_group.hdmi_in: ARC/eARC
+wall_outlet.low_current_group.hdmi_in -> marantz: Цифровой аудиопоток
+
+tv -> wall_outlet.low_current_group.optical: Digital Audio
+wall_outlet.low_current_group.optical -> marantz: Optical In
+
+tv -> wall_outlet.low_current_group.rca: Analog Audio
+wall_outlet.low_current_group.rca -> marantz: AUX In
+
+# === СЕТЕВЫЕ ПОДКЛЮЧЕНИЯ ===
+wall_outlet.low_current_group.ethernet -> tv: Gigabit LAN
+wall_outlet.low_current_group.ethernet -> xbox: Gigabit LAN
+wall_outlet.low_current_group.ethernet -> nvidia_shield: Gigabit LAN
+wall_outlet.low_current_group.ethernet -> apple_tv: Gigabit LAN
+
+# === USB ПОДКЛЮЧЕНИЯ ===
+wall_outlet.low_current_group.usb_c -> xbox: Зарядка контроллеров
+wall_outlet.low_current_group.usb_c -> phone
+
+# === АУДИОСИСТЕМА ===
+marantz -> speaker_left
+marantz -> speaker_right
+
+# === СИСТЕМА УПРАВЛЕНИЯ ===
+harmony: Logitech Harmony Elite {
+  style: {
+    fill: "#9C27B0"
+    stroke: "#333333"
+  }
+}
+
+smart_remote: Умное управление {
+  style: {
+    fill: "#3F51B5"
+    stroke: "#333333"
+  }
+}
+
+harmony -> tv: IR/RF
+harmony -> xbox: IR/RF
+harmony -> marantz: IR/RF
+harmony -> nvidia_shield: IR/RF
+harmony -> apple_tv: IR/RF
+
+smart_remote -> harmony: Wi-Fi/Bluetooth
+
+# === СЦЕНАРИИ ИСПОЛЬЗОВАНИЯ ===
+movie_night: Киновечер NVIDIA Shield -> TV -> Marantz {
+  style: {
+    fill: "#FF5722"
+    stroke: "#333333"
+  }
+}
+
+gaming: Игровой сеанс Xbox -> TV -> Marantz {
+  style: {
+    fill: "#4CAF50"
+    stroke: "#333333"
+  }
+}
+
+music: Стереомузыка TV/Streaming -> Marantz {
+  style: {
+    fill: "#2196F3"
+    stroke: "#333333"
+  }
+}
+
+movie_night -> nvidia_shield
+movie_night -> tv
+movie_night -> marantz
+
+gaming -> xbox
+gaming -> tv
+gaming -> marantz
+
+music -> tv
+music -> marantz
+
+# === ЛЕГЕНДА ===
+legend_power: Розетки 220V {
+  style: {
+    fill: "#FFEB3B"
+    stroke: "#333333"
+  }
+}
+
+legend_video: Видеопорты {
+  style: {
+    fill: "#FF5722"
+    stroke: "#333333"
+  }
+}
+
+legend_audio: Аудиопорты {
+  style: {
+    fill: "#9C27B0"
+    stroke: "#333333"
+  }
+}
+
+legend_network: Сетевые подключения {
+  style: {
+    fill: "#2196F3"
+    stroke: "#333333"
+  }
+}
+
+# Настройки отображения
+direction: right
