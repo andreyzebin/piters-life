@@ -7,7 +7,7 @@ main: Вводной автомат C63 {
   }
 }
 
-spd: УЗИП Type 2\n40kA {
+spd: УЗИП Type 2 40kA {
   shape: cylinder
   style: {
     stroke: "#333333"
@@ -23,521 +23,327 @@ counter: Счётчик электроэнергии {
   }
 }
 
-main_rcd: ПРОТИВОПОЖАРНОЕ УЗО\n63А/100мА или 300мА {
+fire_rcd: УЗО 100мА Противопожарное {
   shape: cylinder
   style: {
     stroke: "#333333"
-    fill: "#FFAAAA"
+    fill: "#FF6B6B"
   }
 }
 
-main -> spd -> counter -> main_rcd
+main -> spd -> counter -> fire_rcd
 
-# === РЕЗЕРВНОЕ ПИТАНИЕ ===
-ups_group: Резервное питание {
-  ups_breaker: 16А ИБП\n(критичные нагрузки) {
+# === ГРУППЫ УЗО ===
+
+# --- ГРУППА 1: Комфортные зоны (30мА) ---
+group1: {
+  shape: rectangle
+  style: {
+    stroke: "#1565C0"
+    fill: "#E3F2FD"
+    stroke-width: 3
+  }
+
+  group1_label: ГРУППА 1\nУЗО 63А/30мА\nКомфортные зоны {
     style: {
-      stroke: "#333333"
-      fill: "#E1BEE7"
-      stroke-dash: 3
+      font-size: 20
+      bold: true
     }
   }
 
-  critical_loads: Критичные нагрузки {
-    router: 📶 Роутер/UPS
-    smart_home_controller: 🎮 Контроллер УД
-    security: 🔒 Охранная система
-
-    router -> smart_home_controller -> security
+  group1_light_relay: Реле света группы 1 {
+    shape: circle
+    style: {
+      fill: "#FFECB3"
+      stroke: "#FFA000"
+    }
   }
 
-  ups_breaker -> critical_loads.router
+  living_room: Гостиная {
+    shape: rectangle
+    style: {
+      fill: "#F5F5F5"
+    }
+    ac: ❄️ Кондиционер
+    sockets: 🔌 Розетки
+    chandelier_sofa: ✨ Люстра диван.
+    spots_dining: 💡 Споты обед.
+    spots_sofa: 💡 Споты диван.
+    leak_sensor: 💧 Датчик протечки
+  }
+
+  bedroom: Спальня {
+    shape: rectangle
+    style: {
+      fill: "#F5F5F5"
+    }
+    ac: ❄️ Кондиционер
+    sockets: 🔌 Розетки
+    leak_sensor: 💧 Датчик протечки
+
+    chandelier_switches: {
+      shape: rectangle
+      style: {
+        fill: "#FFF9C4"
+      }
+      label: 🔘 Люстра
+      pass1: Вход
+      pass2: У кровати
+    }
+
+    spots_switches: {
+      shape: rectangle
+      style: {
+        fill: "#FFF9C4"
+      }
+      label: 🔘 Споты
+      pass1: Вход
+      pass2: У кровати
+    }
+  }
+
+  hallway: Коридор {
+    shape: rectangle
+    style: {
+      fill: "#F5F5F5"
+    }
+    lighting: 💡 Освещение
+    sockets: 🔌 Розетки
+    night_light: 🌙 Ночное
+    motion_sensor: 👁️ Датчик движ.
+    master_switch: 🏠 Мастер-выключатель
+  }
+
+  kids_room: Детская {
+    shape: rectangle
+    style: {
+      fill: "#F5F5F5"
+    }
+    sockets: 🔌 Розетки
+    spots: 💡 Споты
+    leak_sensor: 💧 Датчик протечки
+  }
+
+  group1_label -> group1_light_relay
+  group1_label -> living_room
+  group1_label -> bedroom
+  group1_label -> hallway
+  group1_label -> kids_room
+
+  # Подключение света к реле группы 1
+  group1_light_relay -> living_room.chandelier_sofa
+  group1_light_relay -> living_room.spots_sofa
+  group1_light_relay -> living_room.spots_dining
+  group1_light_relay -> bedroom.chandelier_switches
+  group1_light_relay -> bedroom.spots_switches
+  group1_light_relay -> hallway.lighting
+  group1_light_relay -> kids_room.spots
 }
 
-main_rcd -> ups_group.ups_breaker
+# --- ГРУППА 2: Мокрые зоны (10мА) ---
+group2: {
+  shape: rectangle
+  style: {
+    stroke: "#C62828"
+    fill: "#FFEBEE"
+    stroke-width: 3
+  }
 
-# === ГРУППЫ ЗАЩИТЫ ===
-groups: Группы защиты {
-  # --- Без УЗО (освещение) ---
-  night_breaker: 6А\nНочное освещение {
+  group2_label: ГРУППА 2\nУЗО 40А/10мА\nМокрые зоны {
     style: {
-      stroke: "#333333"
-      fill: "#FFCCBC"
+      font-size: 20
+      bold: true
     }
   }
 
-  light_breaker: 16А\nОсновное освещение {
+  group2_light_relay: Реле света группы 2 {
+    shape: circle
     style: {
-      stroke: "#333333"
-      fill: "#FFCCBC"
+      fill: "#FFECB3"
+      stroke: "#FFA000"
     }
   }
 
-  # --- С индивидуальными УЗО ---
-  room_sockets_group: Розетки комнат {
-    room_breaker: 16А Автомат {
-      style: {
-        stroke: "#333333"
-        fill: "#FFCCBC"
-      }
-    }
-    room_rcd: УЗО 25А/30мА {
-      shape: cylinder
-      style: {
-        stroke: "#333333"
-        fill: "#BBDAFF"
-      }
-    }
-    room_breaker -> room_rcd
-  }
-
-  kitchen_group: Кухня (розетки) {
-    kitchen_breaker: 20А Автомат {
-      style: {
-        stroke: "#333333"
-        fill: "#FFCCBC"
-      }
-    }
-    kitchen_rcd: УЗО 40А/30мА {
-      shape: cylinder
-      style: {
-        stroke: "#333333"
-        fill: "#BBDAFF"
-      }
-    }
-    kitchen_breaker -> kitchen_rcd
-  }
-
-  stove_breaker: 25А\nПлита {
+  kitchen: Кухня {
+    shape: rectangle
     style: {
-      stroke: "#333333"
-      fill: "#FFCCBC"
+      fill: "#F5F5F5"
     }
+    sockets: 🔌 Розетки
+    dishwasher: 🍽️ Посудомойка
+    lighting: 💡 Подсветка
+    hood: 💨 Вытяжка
+    night_light: 🌙 Ночное
+    chandelier_dining: ✨ Люстра обед.
+    leak_sensor: 💧 Датчик протечки
   }
 
-  # --- Кондиционеры (раздельные) ---
-  ac_group: Кондиционеры {
-    ac_living: 10А\nКондиционер гостиная {
-      style: {
-        stroke: "#333333"
-        fill: "#FFCCBC"
-      }
+  bathroom1: Санузел 1 {
+    shape: rectangle
+    style: {
+      fill: "#F5F5F5"
     }
-    ac_bedroom: 10А\nКондиционер спальня {
-      style: {
-        stroke: "#333333"
-        fill: "#FFCCBC"
-      }
-    }
-    ac_kids: 10А\nКондиционер детская {
-      style: {
-        stroke: "#333333"
-        fill: "#FFCCBC"
-      }
-    }
-  }
-
-  # --- Дополнительные зоны ---
-  balcony_group: Балкон/Кладовая {
-    balcony_breaker: 16А Автомат {
-      style: {
-        stroke: "#333333"
-        fill: "#FFCCBC"
-      }
-    }
-    balcony_rcd: УЗО 25А/30мА {
+    lighting: 💡 Освещение
+    sockets: 🔌 Розетки
+    towel_rail: 🔥 Полотенцесушитель
+    night_light: 🌙 Ночное
+    leak_sensor: 💧 Датчик протечки
+    water_valve: 🚰 Запорный клапан {
       shape: cylinder
       style: {
-        stroke: "#333333"
-        fill: "#BBDAFF"
+        fill: "#81C784"
       }
     }
-    balcony_breaker -> balcony_rcd
+    ventilation: {
+      shape: rectangle
+      style: {
+        fill: "#E3F2FD"
+      }
+      label: 🌬️ Вентиляция
+      fan: Вентилятор
+      timer_relay: ⏱️ Реле времени
+    }
   }
 
-  washer_group: Стиральная машина {
-    washer_breaker: 16А Автомат {
-      style: {
-        stroke: "#333333"
-        fill: "#FFCCBC"
-      }
+  bathroom2: Санузел 2 {
+    shape: rectangle
+    style: {
+      fill: "#F5F5F5"
     }
-    washer_rcd: УЗО 25А/30мА {
-      shape: cylinder
+    sockets: 🔌 Розетки
+    lighting: 💡 Освещение
+    ventilation: {
+      shape: rectangle
       style: {
-        stroke: "#333333"
-        fill: "#BBDAFF"
+        fill: "#E3F2FD"
       }
+      label: 🌬️ Вентиляция
+      fan: Вентилятор
+      timer_relay: ⏱️ Реле времени
     }
-    washer_breaker -> washer_rcd
+    leak_sensor: 💧 Датчик протечки
   }
 
-  dishwasher_group: Посудомойка {
-    dishwasher_breaker: 16А Автомат {
-      style: {
-        stroke: "#333333"
-        fill: "#FFCCBC"
-      }
+  laundry: Постирочная {
+    shape: rectangle
+    style: {
+      fill: "#F5F5F5"
     }
-    dishwasher_rcd: УЗО 25А/30мА {
-      shape: cylinder
-      style: {
-        stroke: "#333333"
-        fill: "#BBDAFF"
-      }
+    towel_rail: 🔥 Полотенцесушитель
+    ups: 📶 Бесперебойник
+    leak_sensor: 💧 Датчик протечки
+  }
+
+  stove_group: Электроплита {
+    shape: rectangle
+    style: {
+      fill: "#FFE0B2"
     }
-    dishwasher_breaker -> dishwasher_rcd
+    stove: 🔥 Плита
   }
 
   waterheater_group: Бойлер {
-    waterheater_breaker: 16А Автомат {
-      style: {
-        stroke: "#333333"
-        fill: "#FFCCBC"
-      }
+    shape: rectangle
+    style: {
+      fill: "#C8E6C9"
     }
-    waterheater_rcd: УЗО 25А/30мА {
-      shape: cylinder
-      style: {
-        stroke: "#333333"
-        fill: "#BBDAFF"
-      }
-    }
-    waterheater_breaker -> waterheater_rcd
+    waterheater: 🔥 Бойлер
+    leak_sensor: 💧 Датчик протечки
   }
 
-  bathroom_sockets_group: Санузлы (розетки) {
-    bathroom_breaker: 16А Автомат {
-      style: {
-        stroke: "#333333"
-        fill: "#FFCCBC"
-      }
+  washer_group: Стиральная машина {
+    shape: rectangle
+    style: {
+      fill: "#E1BEE7"
     }
-    bathroom_rcd: УЗО 25А/30мА\n(рекомендуется 10мА) {
-      shape: cylinder
-      style: {
-        stroke: "#333333"
-        fill: "#BBDAFF"
-      }
-    }
-    bathroom_breaker -> bathroom_rcd
+    washer: 🧺 Стиральная машина
+    leak_sensor: 💧 Датчик протечки
   }
+
+  group2_label -> group2_light_relay
+  group2_label -> kitchen
+  group2_label -> bathroom1
+  group2_label -> bathroom2
+  group2_label -> laundry
+  group2_label -> stove_group
+  group2_label -> waterheater_group
+  group2_label -> washer_group
+
+  # Подключение света к реле группы 2
+  group2_light_relay -> kitchen.lighting
+  group2_light_relay -> kitchen.chandelier_dining
+  group2_light_relay -> bathroom1.lighting
+  group2_light_relay -> bathroom2.lighting
 }
 
-# === ПОДКЛЮЧЕНИЕ К ВВОДУ ===
-main_rcd -> groups.night_breaker
-main_rcd -> groups.light_breaker
-main_rcd -> groups.room_sockets_group.room_breaker
-main_rcd -> groups.kitchen_group.kitchen_breaker
-main_rcd -> groups.stove_breaker
-main_rcd -> groups.ac_group.ac_living
-main_rcd -> groups.ac_group.ac_bedroom
-main_rcd -> groups.ac_group.ac_kids
-main_rcd -> groups.balcony_group.balcony_breaker
-main_rcd -> groups.washer_group.washer_breaker
-main_rcd -> groups.dishwasher_group.dishwasher_breaker
-main_rcd -> groups.waterheater_group.waterheater_breaker
-main_rcd -> groups.bathroom_sockets_group.bathroom_breaker
-
-# === ЦЕНТРАЛЬНЫЕ РЕЛЕ ===
-central_relays: ЦЕНТРАЛЬНЫЕ РЕЛЕ {
-  relay_night: Реле ночного\nосвещения {
-    style: {
-      stroke: "#333333"
-      fill: "#FFECB3"
-    }
-  }
-  relay_living: Реле ЖИЛЫЕ\nПОМЕЩЕНИЯ {
-    style: {
-      stroke: "#333333"
-      fill: "#FFECB3"
-    }
-  }
-  relay_kitchen: Реле КУХНЯ\nИ КОРИДОР {
-    style: {
-      stroke: "#333333"
-      fill: "#FFECB3"
-    }
-  }
-  relay_bathroom: Реле\nСАНУЗЛЫ {
-    style: {
-      stroke: "#333333"
-      fill: "#FFECB3"
-    }
-  }
-}
-
-groups.night_breaker -> central_relays.relay_night
-groups.light_breaker -> central_relays.relay_living
-groups.light_breaker -> central_relays.relay_kitchen
-groups.light_breaker -> central_relays.relay_bathroom
+# === ПОДКЛЮЧЕНИЕ ГРУПП К ВВОДУ ===
+fire_rcd -> group1.group1_label
+fire_rcd -> group2.group2_label
 
 # === СИСТЕМА УМНОГО ДОМА ===
 smart_home: УМНЫЙ ДОМ {
-  smart_controller: 🎮 Контроллер {
-    style: {
-      stroke: "#333333"
-      fill: "#E1BEE7"
-    }
-  }
-  wifi_module: 📶 Wi-Fi {
-    style: {
-      stroke: "#333333"
-      fill: "#E1BEE7"
-    }
-  }
-  power_supply: 🔌 БП 12V {
-    style: {
-      stroke: "#333333"
-      fill: "#E1BEE7"
-    }
-  }
-
-  # --- Датчики и сенсоры ---
-  sensors: Датчики {
-    leak_sensor: 💧 Датчик протечки
-    temp_sensor: 🌡️ Датчик температуры
-    motion_sensor: 👁️ Датчик движения
-    humidity_sensor: 💦 Датчик влажности
-  }
-
-  # --- Модуль защиты от протечек ---
-  water_protection: Защита от протечек {
-    leak_controller: ⚠️ Контроллер протечек
-    motorized_valves: 🚰 Электроклапаны
-    leak_controller -> motorized_valves
-  }
-
-  power_supply -> smart_controller
-  smart_controller -> wifi_module
-  smart_controller -> sensors
-  smart_controller -> water_protection.leak_controller
-}
-
-smart_home.smart_controller -> central_relays.relay_night
-
-# === СЛАБОТОЧНЫЙ ЩИТ ===
-low_current: СЛАБОТОЧНЫЙ ЩИТ {
-  network_switch: 🔌 Коммутатор {
-    style: {
-      stroke: "#333333"
-      fill: "#C8E6C9"
-    }
-  }
-
-  structured_cabling: Слаботочные линии {
-    ethernet_ports: 🌐 Ethernet розетки
-    tv_ports: 📺 TV розетки
-    sensor_lines: 📊 Линии датчиков
-    intercom: 🏠 Домофон
-  }
-
-  network_switch -> structured_cabling
-}
-
-# === УПРАВЛЕНИЕ ===
-master_entrance: 🚪 Мастер-выключатель {
+  shape: cylinder
   style: {
     stroke: "#333333"
     fill: "#E1BEE7"
   }
 }
 
-control_unit: БЛОК УПРАВЛЕНИЯ\nРЕЛЕ {
+# === КОНТРОЛЛЕР ПРОТЕЧЕК ===
+leak_protection: {
+  shape: rectangle
   style: {
-    stroke: "#333333"
-    fill: "#FFECB3"
+    fill: "#E8F5E9"
+    stroke: "#2E7D32"
+    stroke-width: 2
   }
-}
+  label: 💧 СИСТЕМА ЗАЩИТЫ ОТ ПРОТЕЧЕК
 
-master_entrance -> control_unit
-control_unit -> central_relays.relay_living
-control_unit -> central_relays.relay_kitchen
-control_unit -> central_relays.relay_bathroom
-
-# === ДИММЕРЫ И РЕГУЛИРОВКА ===
-dimmers: ДИММЕРЫ И РЕГУЛИРОВКА {
-  living_dimmer: 🔅 Диммер гостиная
-  bedroom_dimmer: 🔅 Диммер спальня
-  dining_dimmer: 🔅 Диммер обеденная зона
-}
-
-central_relays.relay_living -> dimmers.living_dimmer
-central_relays.relay_living -> dimmers.bedroom_dimmer
-central_relays.relay_kitchen -> dimmers.dining_dimmer
-
-# === НОЧНОЕ ОСВЕЩЕНИЕ ===
-night_lighting: НОЧНОЕ ОСВЕЩЕНИЕ {
-  night_corridor: 🌙 Коридор {
+  leak_controller: Контроллер протечек {
+    shape: cylinder
     style: {
-      stroke: "#333333"
-      fill: "#FFF59D"
+      fill: "#C8E6C9"
     }
   }
-  night_bathroom: 🌙 Санузлы {
-    style: {
-      stroke: "#333333"
-      fill: "#FFF59D"
-    }
-  }
-  night_bed: 🌙 Кровать {
-    style: {
-      stroke: "#333333"
-      fill: "#FFF59D"
-    }
-  }
-  night_kitchen: 🌙 Кухня {
-    style: {
-      stroke: "#333333"
-      fill: "#FFF59D"
-    }
-  }
+
 }
 
-central_relays.relay_night -> night_lighting.night_corridor
-central_relays.relay_night -> night_lighting.night_bathroom
-central_relays.relay_night -> night_lighting.night_bed
-central_relays.relay_night -> night_lighting.night_kitchen
+# Подключение контроллера протечек к умному дому
+leak_protection.leak_controller -> smart_home
 
-# === ОСНОВНОЕ ОСВЕЩЕНИЕ ===
-main_lighting: ОСНОВНОЕ ОСВЕЩЕНИЕ {
-  kids_lighting: 💡 Детская {
-    style: {
-      stroke: "#333333"
-      fill: "#FFF59D"
-    }
-  }
-  hallway_lighting: 💡 Коридор {
-    style: {
-      stroke: "#333333"
-      fill: "#FFF59D"
-    }
-  }
-}
+# Подключение всех датчиков протечек к контроллеру протечек
+leak_protection.leak_controller -> group2.bathroom1.water_valve
+leak_protection.leak_controller -> group2.bathroom1.leak_sensor
+leak_protection.leak_controller -> group2.kitchen.leak_sensor
+leak_protection.leak_controller -> group1.living_room.leak_sensor
+leak_protection.leak_controller -> group1.bedroom.leak_sensor
+leak_protection.leak_controller -> group1.kids_room.leak_sensor
+leak_protection.leak_controller -> group2.bathroom2.leak_sensor
+leak_protection.leak_controller -> group2.laundry.leak_sensor
+leak_protection.leak_controller -> group2.waterheater_group.leak_sensor
+leak_protection.leak_controller -> group2.washer_group.leak_sensor
 
-central_relays.relay_living -> main_lighting.kids_lighting
-central_relays.relay_kitchen -> main_lighting.hallway_lighting
+# Подключение умного дома к другим системам
+group2.laundry.ups -> smart_home
+smart_home -> group1.hallway.motion_sensor
+smart_home -> group2.kitchen.night_light
+smart_home -> group2.bathroom1.night_light
+smart_home -> group1.hallway.night_light
 
-# === ОСВЕЩЕНИЕ С ДИММЕРАМИ ===
-living_room: ГОСТИНАЯ {
-  sofa_spots: 💡 Споты дивана
-  chandelier: ✨ Люстра
-  dining_spots: 💡 Споты обеденные
-  dining_lamp: 💡 Лампа обеденная
-  kitchen_lighting: 💡 Подсветка кухни
-}
-
-bedroom: СПАЛЬНЯ {
-  bedroom_spots: 💡 Точечные
-  bedroom_chandelier: ✨ Люстра
-}
-
-dimmers.living_dimmer -> living_room.sofa_spots
-dimmers.living_dimmer -> living_room.chandelier
-dimmers.dining_dimmer -> living_room.dining_spots
-dimmers.dining_dimmer -> living_room.dining_lamp
-dimmers.bedroom_dimmer -> bedroom.bedroom_spots
-dimmers.bedroom_dimmer -> bedroom.bedroom_chandelier
-
-central_relays.relay_kitchen -> living_room.kitchen_lighting
-
-# === ВЕНТИЛЯЦИЯ С АВТОМАТИЗАЦИЕЙ ===
-ventilation: ВЕНТИЛЯЦИЯ {
-  bathroom_fan1: 🌬️ Вентилятор санузел 1 {
-    style: {
-      stroke: "#333333"
-      fill: "#BBDEFB"
-    }
-  }
-  bathroom_fan2: 🌬️ Вентилятор санузел 2 {
-    style: {
-      stroke: "#333333"
-      fill: "#BBDEFB"
-    }
-  }
-  kitchen_hood: 💨 Вытяжка кухня {
-    style: {
-      stroke: "#333333"
-      fill: "#BBDEFB"
-    }
-  }
-}
-
-smart_home.smart_controller -> ventilation
-smart_home.sensors.humidity_sensor -> ventilation
-
-# === САНУЗЛЫ ===
-bathrooms: САНУЗЛЫ {
-  bathroom_sockets: 🚿 Розетки
-  bathroom_lighting: 💡 Освещение
-  local_switches: 🔘 Выключатели
-}
-
-central_relays.relay_bathroom -> bathrooms.local_switches
-bathrooms.local_switches -> bathrooms.bathroom_lighting
-groups.bathroom_sockets_group.bathroom_rcd -> bathrooms.bathroom_sockets
-
-# === РОЗЕТКИ И ПРИБОРЫ ===
-sockets: РОЗЕТОЧНЫЕ ГРУППЫ {
-  room_sockets: 🔌 Комнаты
-  kitchen_sockets: 🔌 Кухня
-  balcony_sockets: 🔌 Балкон/кладовая
-  stove: 🔥 Плита
-  washer: 🧺 Стиральная
-  dishwasher: 🍽️ Посудомойка
-  waterheater: 🔥 Бойлер
-  ac_living: ❄️ Кондиционер гостиная
-  ac_bedroom: ❄️ Кондиционер спальня
-  ac_kids: ❄️ Кондиционер детская
-}
-
-# --- Подключение через УЗО ---
-groups.room_sockets_group.room_rcd -> sockets.room_sockets
-groups.kitchen_group.kitchen_rcd -> sockets.kitchen_sockets
-groups.balcony_group.balcony_rcd -> sockets.balcony_sockets
-groups.stove_breaker -> sockets.stove
-groups.washer_group.washer_rcd -> sockets.washer
-groups.dishwasher_group.dishwasher_rcd -> sockets.dishwasher
-groups.waterheater_group.waterheater_rcd -> sockets.waterheater
-groups.ac_group.ac_living -> sockets.ac_living
-groups.ac_group.ac_bedroom -> sockets.ac_bedroom
-groups.ac_group.ac_kids -> sockets.ac_kids
-
-# === ЗАПАС МЕСТА В ЩИТКЕ ===
-spare_space: 🆕 ЗАПАС МЕСТА\n(+30% на DIN-рейке) {
+# === МАСТЕР-ВЫКЛЮЧАТЕЛЬ ===
+master_control: Мастер-выключатель {
+  shape: rectangle
   style: {
-    stroke: "#666666"
-    fill: "#F5F5F5"
-    stroke-dash: 2
+    fill: "#FFF9C4"
+    stroke: "#FF9800"
   }
+  master_switch: 🏠 Выключатель (вход)
 }
 
-# === ЛЕГЕНДА ===
-legend: ЛЕГЕНДА {
-  legend_breaker: Автоматы защиты
-  legend_relay: Реле управления
-  legend_smart: Умный дом
-  legend_light: Освещение
-  legend_socket: Розетки/приборы
-  legend_group_rcd: УЗО групповое
-  legend_fire_rcd: УЗО противопожарное
-  legend_spd: УЗИП грозозащита
-  legend_ups: Резервное питание
-  legend_low_current: Слаботочные системы
-  legend_dimmer: Диммеры
-  legend_ventilation: Вентиляция
-  legend_spare: Запас места
-}
+# Подключение мастер-выключателя к реле света
+group1.hallway.master_switch -> master_control.master_switch
+master_control.master_switch -> group1.group1_light_relay
+master_control.master_switch -> group2.group2_light_relay
 
-# Настройки отображения
-direction: right
-variables: {
-  environment: {
-    padding: 50
-  }
-}
 
-# Связи между системами
-smart_home.smart_controller -> central_relays
-smart_home.smart_controller -> dimmers
-ups_group.critical_loads.smart_home_controller -> smart_home.smart_controller
+direction: down
