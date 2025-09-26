@@ -1,0 +1,184 @@
+# Проект электропроводки квартиры
+# Группы и защита
+
+electrical_plan:
+  # Уровень 1: Противопожарное УЗО на вводе
+  main_fire_protection:
+    device: "УЗО селективное"
+    current: "100-300 мА"
+    type: "S"
+
+  # Уровень 2: Групповые линии
+  groups:
+
+    # КУХНЯ
+    kitchen_worktop_sockets:
+      protection: "УЗО"
+      sensitivity: "10 мА"
+      type: "A"
+      breaker: "16А"
+      cable: "3x2.5 мм²"
+      consumers:
+        - "розетки у рабочей столешницы"
+        - "чайник"
+        - "кофеварка"
+        - "блендер"
+        - "миксер"
+
+    kitchen_oven:
+      protection: "Диф.автомат"
+      sensitivity: "30 мА"
+      type: "A"
+      breaker: "32А"
+      cable: "3x4-6 мм²"
+      consumers:
+        - "электроплита/варочная панель"
+
+    kitchen_appliances:
+      protection: "УЗО"
+      sensitivity: "30 мА"
+      type: "A"
+      breaker: "16А"
+      cable: "3x2.5 мм²"
+      consumers:
+        - "посудомоечная машина"
+        - "вытяжка"
+
+    # САНУЗЕЛ 1
+    bathroom1_sockets:
+      protection: "УЗО"
+      sensitivity: "10 мА"
+      type: "A"
+      breaker: "16А"
+      cable: "3x2.5 мм²"
+      consumers:
+        - "розетки для фена/бритвы"
+
+    bathroom1_heaters:
+      protection: "УЗО"
+      sensitivity: "30 мА"
+      type: "A"
+      breaker: "16А/25А"
+      cable: "3x2.5-4 мм²"
+      consumers:
+        - "бойлер"
+        - "полотенцесушитель"
+
+    # САНУЗЕЛ 2
+    bathroom2_sockets:
+      protection: "УЗО"
+      sensitivity: "10 мА"
+      type: "A"
+      breaker: "16А"
+      cable: "3x2.5 мм²"
+      consumers:
+        - "розетки"
+
+    # ПОСТИРОЧНАЯ
+    laundry_room:
+      protection: "УЗО"
+      sensitivity: "30 мА"
+      type: "A"
+      breaker: "16А"
+      cable: "3x2.5 мм²"
+      consumers:
+        - "стиральная машина"
+        - "полотенцесушитель"
+        - "розетка для ИБП"
+
+    # ДЕТСКАЯ
+    kids_room_sockets:
+      protection: "УЗО"
+      sensitivity: "10 мА"
+      type: "A"
+      breaker: "16А"
+      cable: "3x2.5 мм²"
+      consumers:
+        - "розетки детской"
+
+    # ЖИЛЫЕ ПОМЕЩЕНИЯ
+    living_room_sockets:
+      protection: "УЗО"
+      sensitivity: "30 мА"
+      type: "A"
+      breaker: "20А"
+      cable: "3x2.5 мм²"
+      consumers:
+        - "розетки гостиной"
+
+    bedroom_sockets:
+      protection: "УЗО"
+      sensitivity: "30 мА"
+      type: "A"
+      breaker: "16А"
+      cable: "3x2.5 мм²"
+      consumers:
+        - "розетки спальни"
+
+    hallway_sockets:
+      protection: "УЗО"
+      sensitivity: "30 мА"
+      type: "A"
+      breaker: "16А"
+      cable: "3x2.5 мм²"
+      consumers:
+        - "розетки коридора"
+
+    # КОНДИЦИОНЕРЫ
+    ac_living_room:
+      protection: "УЗО"
+      sensitivity: "30 мА"
+      type: "A"
+      breaker: "16А"
+      cable: "3x2.5 мм²"
+      consumers:
+        - "кондиционер гостиной"
+
+    ac_bedroom:
+      protection: "УЗО"
+      sensitivity: "30 мА"
+      type: "A"
+      breaker: "16А"
+      cable: "3x2.5 мм²"
+      consumers:
+        - "кондиционер спальни"
+
+    # ОСВЕЩЕНИЕ
+    lighting_apartment:
+      protection: "УЗО"
+      sensitivity: "30 мА"
+      type: "A"
+      breaker: "10А"
+      cable: "3x1.5 мм²"
+      consumers:
+        - "освещение кухни"
+        - "освещение санузлов"
+        - "освещение постирочной"
+        - "освещение гостиной"
+        - "освещение спальни"
+        - "освещение детской"
+        - "освещение коридора"
+        - "ночное освещение"
+        - "вентиляторы санузлов"
+        - "датчики движения"
+        - "реле задержки выключения"
+
+  # Слаботочные системы
+  low_voltage:
+    ups_laundry:
+      device: "ИБП/стабилизатор"
+      input: "розетка постирочной"
+      output: "12V/5V"
+      consumers:
+        - "Wi-Fi роутер"
+        - "Home Assistant"
+        - "Zigbee Hub"
+        - "датчик протечки"
+
+  # Примечания
+  notes:
+    - "Все УЗО типа А (для переменного и пульсирующего тока)"
+    - "Сечение кабеля указано минимальное рекомендуемое"
+    - "Каждая группа имеет отдельный автоматический выключатель"
+    - "Слаботочное оборудование запитано через ИБП"
+    - "Проходные выключатели реализуются стандартно"

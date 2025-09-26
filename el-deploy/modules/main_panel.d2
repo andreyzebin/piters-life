@@ -1,8 +1,8 @@
 # ОСНОВНОЙ ЩИТ
 main_panel: Главный щит {
   shape: rectangle
-  width: 200
-  height: 300
+  width: 240
+  height: 400
   style: {
     stroke: "#333333"
     fill: "#BBDAFF"
@@ -12,23 +12,168 @@ main_panel: Главный щит {
   # Вводные устройства
   main_breaker: Вводной автомат C63
   counter: Счётчик
-  fire_rcd: УЗО 100мА
-
-  # Групповые автоматы
-  group1: УЗО 30мА Гостиная+Кухня
-  group2: УЗО 30мА Спальня+Детская
-  group3: УЗО 10мА Санузлы
-  group4: Автомат 16А Коридор
-  group5: Автомат 25А Плита
-  group6: Автомат 20А Бойлер
-  group7: Автомат 16А Стиральная
+  fire_rcd: УЗО 100мА Противопожарное
 
   main_breaker -> counter -> fire_rcd
-  fire_rcd -> group1
-  fire_rcd -> group2
-  fire_rcd -> group3
-  fire_rcd -> group4
-  fire_rcd -> group5
-  fire_rcd -> group6
-  fire_rcd -> group7
+
+  # === ГРУППА 1: Комфортные зоны (30мА) ===
+  group1: {
+    shape: rectangle
+    style: {
+      stroke: "#1565C0"
+      fill: "#E3F2FD"
+    }
+
+    group1_label: ГРУППА 1 | УЗО 63А/30мА {
+      style: {
+        font-size: 14
+        bold: true
+      }
+    }
+
+    group1_consumer: Потребители: Гостиная+Спальня+Детская+Коридор
+
+    # Автоматы группы 1
+    group1_1: Автомат 16А Гостиная-освещение
+    group1_2: Автомат 16А Гостиная-розетки
+    group1_3: Автомат 16А Спальня-освещение
+    group1_4: Автомат 16А Спальня-розетки
+    group1_5: Автомат 10А Детская-освещение
+    group1_6: Автомат 10А Детская-розетки
+    group1_7: Автомат 10А Коридор-освещение
+    group1_8: Автомат 10А Коридор-розетки
+
+    group1_label -> group1_consumer
+    group1_label -> group1_1
+    group1_label -> group1_2
+    group1_label -> group1_3
+    group1_label -> group1_4
+    group1_label -> group1_5
+    group1_label -> group1_6
+    group1_label -> group1_7
+    group1_label -> group1_8
+  }
+
+  # === ГРУППА 2: Освещение кухни + санузлов (10мА) ===
+  group2: {
+    shape: rectangle
+    style: {
+      stroke: "#2E7D32"
+      fill: "#E8F5E9"
+    }
+
+    group2_label: ГРУППА 2 | УЗО 25А/10мА {
+      style: {
+        font-size: 14
+        bold: true
+      }
+    }
+
+    group2_consumer: Потребители: Освещение кухни и санузлов
+
+    # Освещение
+    group2_1: Автомат 10А Кухня-освещение
+    group2_2: Автомат 10А Санузел1-освещение
+    group2_3: Автомат 10А Санузел2-освещение
+    group2_4: Автомат 10А Вытяжка кухня
+
+    group2_label -> group2_consumer
+    group2_label -> group2_1
+    group2_label -> group2_2
+    group2_label -> group2_3
+    group2_label -> group2_4
+  }
+
+  # === ГРУППА 3: Розетки кухни + санузлов + постирочной (10мА) ===
+  group3: {
+    shape: rectangle
+    style: {
+      stroke: "#C62828"
+      fill: "#FFEBEE"
+    }
+
+    group3_label: ГРУППА 3 | УЗО 40А/10мА {
+      style: {
+        font-size: 14
+        bold: true
+      }
+    }
+
+    group3_consumer: Потребители: Розетки кухни, санузлов, постирочной
+
+    # Розетки
+    group3_1: Автомат 16А Кухня-розетки
+    group3_2: Автомат 16А Посудомойка
+    group3_3: Автомат 16А Холодильник
+    group3_4: Автомат 16А Санузел1-розетки
+    group3_5: Автомат 16А Санузел2-розетки
+    group3_6: Автомат 16А Постирочная-розетки
+
+    group3_label -> group3_consumer
+    group3_label -> group3_1
+    group3_label -> group3_2
+    group3_label -> group3_3
+    group3_label -> group3_4
+    group3_label -> group3_5
+    group3_label -> group3_6
+  }
+
+  # === ГРУППА 4: Плита (10мА) ===
+  group4: {
+    shape: rectangle
+    style: {
+      stroke: "#FF6F00"
+      fill: "#FFF3E0"
+    }
+
+    group4_label: ГРУППА 4 | УЗО 32А/10мА {
+      style: {
+        font-size: 14
+        bold: true
+      }
+    }
+
+    group4_consumer: Потребители: Плита
+
+    group4_1: Автомат 25А Варочная панель
+    group4_2: Автомат 16А Духовой шкаф
+
+    group4_label -> group4_consumer
+    group4_label -> group4_1
+    group4_label -> group4_2
+  }
+
+  # === ГРУППА 5: Бойлер + стиральная (10мА) ===
+  group5: {
+    shape: rectangle
+    style: {
+      stroke: "#6A1B9A"
+      fill: "#F3E5F5"
+    }
+
+    group5_label: ГРУППА 5 | УЗО 32А/10мА {
+      style: {
+        font-size: 14
+        bold: true
+      }
+    }
+
+    group5_consumer: Потребители: Бойлер, Стиральная, Полотенцесушитель
+
+    group5_1: Автомат 20А Бойлер
+    group5_2: Автомат 16А Стиральная машина
+    group5_3: Автомат 16А Полотенцесушитель
+
+    group5_label -> group5_consumer
+    group5_label -> group5_1
+    group5_label -> group5_2
+    group5_label -> group5_3
+  }
+
+  # Подключение групп к противопожарному УЗО
+  fire_rcd -> group1.group1_label
+  fire_rcd -> group2.group2_label
+  fire_rcd -> group3.group3_label
+  fire_rcd -> group4.group4_label
+  fire_rcd -> group5.group5_label
 }
