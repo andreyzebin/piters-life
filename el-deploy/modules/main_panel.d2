@@ -1,8 +1,8 @@
 # ОСНОВНОЙ ЩИТ
 main_panel: Главный щит {
   shape: rectangle
-  width: 240
-  height: 400
+  width: 280
+  height: 540
   style: {
     stroke: "#333333"
     fill: "#BBDAFF"
@@ -12,168 +12,249 @@ main_panel: Главный щит {
   # Вводные устройства
   main_breaker: Вводной автомат C63
   counter: Счётчик
-  fire_rcd: УЗО 100мА Противопожарное
+  fire_rcd: УЗО селективное 100мА (тип S)
 
   main_breaker -> counter -> fire_rcd
 
-  # === ГРУППА 1: Комфортные зоны (30мА) ===
-  group1: {
+  # === ОСВЕЩЕНИЕ (30мА) ===
+  lighting_group: {
     shape: rectangle
     style: {
       stroke: "#1565C0"
       fill: "#E3F2FD"
     }
 
-    group1_label: ГРУППА 1 | УЗО 63А/30мА {
+    lighting_label: ОСВЕЩЕНИЕ | УЗО 25А/30мА (тип А) {
       style: {
-        font-size: 14
+        font-size: 12
         bold: true
       }
     }
 
-    group1_consumer: Потребители: Гостиная+Спальня+Детская+Коридор
+    lighting_1: Автомат 10А Освещение кухни
+    lighting_2: Автомат 10А Освещение санузлов
+    lighting_3: Автомат 10А Освещение постирочной
+    lighting_4: Автомат 10А Освещение гостиной
+    lighting_5: Автомат 10А Освещение спальни
+    lighting_6: Автомат 10А Освещение детской
+    lighting_7: Автомат 10А Освещение коридора
+    lighting_8: Автомат 10А Вентиляторы санузлов
 
-    # Автоматы группы 1
-    group1_1: Автомат 16А Гостиная-освещение
-    group1_2: Автомат 16А Гостиная-розетки
-    group1_3: Автомат 16А Спальня-освещение
-    group1_4: Автомат 16А Спальня-розетки
-    group1_5: Автомат 10А Детская-освещение
-    group1_6: Автомат 10А Детская-розетки
-    group1_7: Автомат 10А Коридор-освещение
-    group1_8: Автомат 10А Коридор-розетки
-
-    group1_label -> group1_consumer
-    group1_label -> group1_1
-    group1_label -> group1_2
-    group1_label -> group1_3
-    group1_label -> group1_4
-    group1_label -> group1_5
-    group1_label -> group1_6
-    group1_label -> group1_7
-    group1_label -> group1_8
+    lighting_label -> lighting_1
+    lighting_label -> lighting_2
+    lighting_label -> lighting_3
+    lighting_label -> lighting_4
+    lighting_label -> lighting_5
+    lighting_label -> lighting_6
+    lighting_label -> lighting_7
+    lighting_label -> lighting_8
   }
 
-  # === ГРУППА 2: Освещение кухни + санузлов (10мА) ===
-  group2: {
+  # === РОЗЕТКИ КУХНИ (10мА) ===
+  kitchen_sockets_group: {
     shape: rectangle
     style: {
       stroke: "#2E7D32"
       fill: "#E8F5E9"
     }
 
-    group2_label: ГРУППА 2 | УЗО 25А/10мА {
+    kitchen_sockets_label: КУХНЯ РОЗЕТКИ | УЗО 25А/10мА (тип А) {
       style: {
-        font-size: 14
+        font-size: 12
         bold: true
       }
     }
 
-    group2_consumer: Потребители: Освещение кухни и санузлов
+    kitchen_sockets_1: Автомат 16А Розетки рабочей столешницы
 
-    # Освещение
-    group2_1: Автомат 10А Кухня-освещение
-    group2_2: Автомат 10А Санузел1-освещение
-    group2_3: Автомат 10А Санузел2-освещение
-    group2_4: Автомат 10А Вытяжка кухня
-
-    group2_label -> group2_consumer
-    group2_label -> group2_1
-    group2_label -> group2_2
-    group2_label -> group2_3
-    group2_label -> group2_4
+    kitchen_sockets_label -> kitchen_sockets_1
   }
 
-  # === ГРУППА 3: Розетки кухни + санузлов + постирочной (10мА) ===
-  group3: {
+  # === КУХОННАЯ ТЕХНИКА (30мА) ===
+  kitchen_appliances_group: {
+    shape: rectangle
+    style: {
+      stroke: "#388E3C"
+      fill: "#C8E6C9"
+    }
+
+    kitchen_appliances_label: КУХОННАЯ ТЕХНИКА | УЗО 25А/30мА (тип А) {
+      style: {
+        font-size: 12
+        bold: true
+      }
+    }
+
+    kitchen_appliances_1: Автомат 16А Посудомоечная машина
+    kitchen_appliances_2: Автомат 16А Вытяжка
+
+    kitchen_appliances_label -> kitchen_appliances_1
+    kitchen_appliances_label -> kitchen_appliances_2
+  }
+
+  # === ПЛИТА КУХОННАЯ ===
+  stove_group: {
     shape: rectangle
     style: {
       stroke: "#C62828"
       fill: "#FFEBEE"
     }
 
-    group3_label: ГРУППА 3 | УЗО 40А/10мА {
+    stove_label: ПЛИТА | Диф.автомат 32А/30мА (тип А) {
       style: {
-        font-size: 14
+        font-size: 12
         bold: true
       }
     }
 
-    group3_consumer: Потребители: Розетки кухни, санузлов, постирочной
+    stove_1: Варочная панель/электроплита
 
-    # Розетки
-    group3_1: Автомат 16А Кухня-розетки
-    group3_2: Автомат 16А Посудомойка
-    group3_3: Автомат 16А Холодильник
-    group3_4: Автомат 16А Санузел1-розетки
-    group3_5: Автомат 16А Санузел2-розетки
-    group3_6: Автомат 16А Постирочная-розетки
-
-    group3_label -> group3_consumer
-    group3_label -> group3_1
-    group3_label -> group3_2
-    group3_label -> group3_3
-    group3_label -> group3_4
-    group3_label -> group3_5
-    group3_label -> group3_6
+    stove_label -> stove_1
   }
 
-  # === ГРУППА 4: Плита (10мА) ===
-  group4: {
+  # === САНУЗЕЛ 1 РОЗЕТКИ (10мА) ===
+  bathroom1_sockets_group: {
     shape: rectangle
     style: {
       stroke: "#FF6F00"
       fill: "#FFF3E0"
     }
 
-    group4_label: ГРУППА 4 | УЗО 32А/10мА {
+    bathroom1_sockets_label: САНУЗЕЛ 1 РОЗЕТКИ | УЗО 25А/10мА (тип А) {
       style: {
-        font-size: 14
+        font-size: 12
         bold: true
       }
     }
 
-    group4_consumer: Потребители: Плита
+    bathroom1_sockets_1: Автомат 16А Розетки (фен/бритва)
 
-    group4_1: Автомат 25А Варочная панель
-    group4_2: Автомат 16А Духовой шкаф
-
-    group4_label -> group4_consumer
-    group4_label -> group4_1
-    group4_label -> group4_2
+    bathroom1_sockets_label -> bathroom1_sockets_1
   }
 
-  # === ГРУППА 5: Бойлер + стиральная (10мА) ===
-  group5: {
+  # === БОЙЛЕР И ПОЛОТЕНЦЕСУШИТЕЛЬ (30мА) ===
+  bathroom1_heaters_group: {
+    shape: rectangle
+    style: {
+      stroke: "#D84315"
+      fill: "#FBE9E7"
+    }
+
+    bathroom1_heaters_label: БОЙЛЕР И ПОЛОТЕНЦЕСУШИТЕЛЬ | УЗО 32А/30мА (тип А) {
+      style: {
+        font-size: 12
+        bold: true
+      }
+    }
+
+    bathroom1_heaters_1: Автомат 25А Бойлер
+    bathroom1_heaters_2: Автомат 16А Полотенцесушитель
+
+    bathroom1_heaters_label -> bathroom1_heaters_1
+    bathroom1_heaters_label -> bathroom1_heaters_2
+  }
+
+  # === САНУЗЕЛ 2 (10мА) ===
+  bathroom2_group: {
     shape: rectangle
     style: {
       stroke: "#6A1B9A"
       fill: "#F3E5F5"
     }
 
-    group5_label: ГРУППА 5 | УЗО 32А/10мА {
+    bathroom2_label: САНУЗЕЛ 2 | УЗО 25А/10мА (тип А) {
       style: {
-        font-size: 14
+        font-size: 12
         bold: true
       }
     }
 
-    group5_consumer: Потребители: Бойлер, Стиральная, Полотенцесушитель
+    bathroom2_1: Автомат 16А Розетки
 
-    group5_1: Автомат 20А Бойлер
-    group5_2: Автомат 16А Стиральная машина
-    group5_3: Автомат 16А Полотенцесушитель
+    bathroom2_label -> bathroom2_1
+  }
 
-    group5_label -> group5_consumer
-    group5_label -> group5_1
-    group5_label -> group5_2
-    group5_label -> group5_3
+  # === ПОСТИРОЧНАЯ (30мА) ===
+  laundry_group: {
+    shape: rectangle
+    style: {
+      stroke: "#00796B"
+      fill: "#E0F2F1"
+    }
+
+    laundry_label: ПОСТИРОЧНАЯ | УЗО 25А/30мА (тип А) {
+      style: {
+        font-size: 12
+        bold: true
+      }
+    }
+
+    laundry_1: Автомат 16А Стиральная машина
+    laundry_2: Автомат 16А Полотенцесушитель
+    laundry_3: Автомат 10А Розетка ИБП
+
+    laundry_label -> laundry_1
+    laundry_label -> laundry_2
+    laundry_label -> laundry_3
+  }
+
+  # === РОЗЕТКИ ЖИЛЫХ ПОМЕЩЕНИЙ (30мА) ===
+  sockets_group: {
+    shape: rectangle
+    style: {
+      stroke: "#5D4037"
+      fill: "#EFEBE9"
+    }
+
+    sockets_label: РОЗЕТКИ ЖИЛЫЕ | УЗО 63А/30мА (тип А) {
+      style: {
+        font-size: 12
+        bold: true
+      }
+    }
+
+    sockets_1: Автомат 20А Розетки гостиной
+    sockets_2: Автомат 16А Розетки спальни
+    sockets_3: Автомат 16А Розетки детской
+    sockets_4: Автомат 16А Розетки коридора
+
+    sockets_label -> sockets_1
+    sockets_label -> sockets_2
+    sockets_label -> sockets_3
+    sockets_label -> sockets_4
+  }
+
+  # === КОНДИЦИОНЕРЫ (30мА) ===
+  ac_group: {
+    shape: rectangle
+    style: {
+      stroke: "#0277BD"
+      fill: "#E1F5FE"
+    }
+
+    ac_label: КОНДИЦИОНЕРЫ | УЗО 25А/30мА (тип А) {
+      style: {
+        font-size: 12
+        bold: true
+      }
+    }
+
+    ac_1: Автомат 16А Кондиционер гостиной
+    ac_2: Автомат 16А Кондиционер спальни
+
+    ac_label -> ac_1
+    ac_label -> ac_2
   }
 
   # Подключение групп к противопожарному УЗО
-  fire_rcd -> group1.group1_label
-  fire_rcd -> group2.group2_label
-  fire_rcd -> group3.group3_label
-  fire_rcd -> group4.group4_label
-  fire_rcd -> group5.group5_label
+  fire_rcd -> lighting_group.lighting_label
+  fire_rcd -> kitchen_sockets_group.kitchen_sockets_label
+  fire_rcd -> kitchen_appliances_group.kitchen_appliances_label
+  fire_rcd -> stove_group.stove_label
+  fire_rcd -> bathroom1_sockets_group.bathroom1_sockets_label
+  fire_rcd -> bathroom1_heaters_group.bathroom1_heaters_label
+  fire_rcd -> bathroom2_group.bathroom2_label
+  fire_rcd -> laundry_group.laundry_label
+  fire_rcd -> sockets_group.sockets_label
+  fire_rcd -> ac_group.ac_label
 }

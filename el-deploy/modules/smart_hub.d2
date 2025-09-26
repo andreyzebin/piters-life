@@ -1,29 +1,86 @@
 # УМНЫЙ ХАБ ГОСТИНАЯ+КУХНЯ
 smart_hub: Умный хаб Гостиная+Кухня {
   shape: rectangle
-  width: 180
-  height: 400
+  width: 220
+  height: 500
   style: {
     stroke: "#1565C0"
     fill: "#E3F2FD"
     stroke-width: 3
   }
 
-  # Релейные модули
-  relays: {
+  # Входные линии (Гостиная - Освещение)
+  power_in_light_lr: Питание освещение гостиная
+
+  # Входные линии (Гостиная - Розетки)
+  power_in_sockets_lr: Питание розетки гостиная
+
+  # Входные линии (Кухня - Освещение)
+  power_in_light_kitchen: Питание освещение кухня
+
+  # Входные линии (Кухня - Розетки столешницы)
+  power_in_sockets_kitchen: Питание розетки столешницы
+
+  # Входные линии (Кухня - Техника)
+  power_in_dishwasher: Питание посудомоечная машина
+  power_in_hood: Питание вытяжка
+
+  # Входные линии (Кондиционер)
+  power_in_ac: Питание кондиционер
+
+  # Релейные модули (Гостиная - Освещение)
+  relays_light_lr: {
     Реле 1: Люстра диванная
     Реле 2: Споты диванные
     Реле 3: Споты обеденные
     Реле 4: Люстра обеденная
-    Реле 5: Подсветка кухня
-    Реле 6: Вытяжка
-    Реле 7: Розетки диван
-    Реле 8: Розетки обед
-    Реле 9: Кондиционер
+  }
+
+  # Релейные модули (Гостиная - Розетки)
+  relays_sockets_lr: {
+    Реле 5: Розетки диван
+    Реле 6: Розетки обед
+    Реле 7: Розетки TV
+  }
+
+  # Релейные модули (Кухня - Освещение)
+  relays_light_kitchen: {
+    Реле 8: Подсветка кухня
+  }
+
+  # Релейные модули (Кухня - Розетки)
+  relays_sockets_kitchen: {
+    Реле 9: Розетки кухня рабочие
+  }
+
+  # Релейные модули (Кухня - Техника)
+  relays_appliances_kitchen: {
+    Реле 10: Посудомоечная машина
+    Реле 11: Вытяжка
+  }
+
+  # Релейные модули (Кондиционер)
+  relays_ac: {
+    Реле 12: Кондиционер гостиной
   }
 
   # Сетевой шлюз
   network: Ethernet шлюз
 
-  relays -> network
+  # Подключение питания к реле
+  power_in_light_lr -> relays_light_lr
+  power_in_sockets_lr -> relays_sockets_lr
+  power_in_light_kitchen -> relays_light_kitchen
+  power_in_sockets_kitchen -> relays_sockets_kitchen
+  power_in_dishwasher -> relays_appliances_kitchen
+  power_in_hood -> relays_appliances_kitchen
+  power_in_ac -> relays_ac
+
+  # Подключение к сети
+  relays_light_lr -> network
+  relays_sockets_lr -> network
+  relays_light_kitchen -> network
+  relays_sockets_kitchen -> network
+  relays_appliances_kitchen -> network
+  relays_ac -> network
 }

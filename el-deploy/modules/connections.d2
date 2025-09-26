@@ -1,15 +1,51 @@
 # ПОДКЛЮЧЕНИЕ ОСНОВНОГО ЩИТА К УЗЛАМ
-main_panel.group1 -> smart_hub: Кабель 3x4мм²
-main_panel.group2 -> bedroom_box.power_in: Кабель 3x2.5мм²
-main_panel.group2 -> kids_box.power_in: Кабель 3x2.5мм²
-main_panel.group3 -> bathroom1_box.power_in: Кабель 3x2.5мм²
-main_panel.group3 -> bathroom2_box.power_in: Кабель 3x2.5мм²
-main_panel.group4 -> hallway_box.power_in: Кабель 3x2.5мм²
 
-# ПРЯМЫЕ ПОДКЛЮЧЕНИЯ ИЗ ГЛАВНОГО ЩИТА
-main_panel.group5 -> stove_out: 🔌 Плита
-main_panel.group6 -> waterheater_out: 🔌 Бойлер
-main_panel.group7 -> washer_out: 🔌 Стиральная
+# === ОСВЕЩЕНИЕ ===
+main_panel.lighting_group.lighting_1 -> smart_hub: Кабель 3x1.5мм² | Освещение кухни
+main_panel.lighting_group.lighting_2 -> bathroom1_box: Кабель 3x1.5мм² | Освещение санузел1
+main_panel.lighting_group.lighting_2 -> bathroom2_box: Кабель 3x1.5мм² | Освещение санузел2
+main_panel.lighting_group.lighting_3 -> laundry_box: Кабель 3x1.5мм² | Освещение постирочной
+main_panel.lighting_group.lighting_4 -> smart_hub: Кабель 3x1.5мм² | Освещение гостиной
+main_panel.lighting_group.lighting_5 -> bedroom_box: Кабель 3x1.5мм² | Освещение спальни
+main_panel.lighting_group.lighting_6 -> kids_box: Кабель 3x1.5мм² | Освещение детской
+main_panel.lighting_group.lighting_7 -> hallway_box: Кабель 3x1.5мм² | Освещение коридора
+main_panel.lighting_group.lighting_8 -> bathroom1_box: Кабель 3x1.5мм² | Вентилятор санузел1
+main_panel.lighting_group.lighting_8 -> bathroom2_box: Кабель 3x1.5мм² | Вентилятор санузел2
+
+# === РОЗЕТКИ КУХНИ ===
+main_panel.kitchen_sockets_group.kitchen_sockets_1 -> smart_hub: Кабель 3x2.5мм² | Розетки рабочей столешницы
+
+# === КУХОННАЯ ТЕХНИКА ===
+main_panel.kitchen_appliances_group.kitchen_appliances_1 -> smart_hub: Кабель 3x2.5мм² | Посудомоечная машина
+main_panel.kitchen_appliances_group.kitchen_appliances_2 -> smart_hub: Кабель 3x2.5мм² | Вытяжка
+
+# === ПЛИТА ===
+main_panel.stove_group.stove_1 -> stove_out: Кабель 3x4-6мм² | 🔌 Варочная панель/электроплита
+
+# === САНУЗЕЛ 1 РОЗЕТКИ ===
+main_panel.bathroom1_sockets_group.bathroom1_sockets_1 -> bathroom1_box: Кабель 3x2.5мм² | Розетки (фен/бритва)
+
+# === БОЙЛЕР И ПОЛОТЕНЦЕСУШИТЕЛЬ ===
+main_panel.bathroom1_heaters_group.bathroom1_heaters_1 -> waterheater_out: Кабель 3x2.5-4мм² | 🔌 Бойлер
+main_panel.bathroom1_heaters_group.bathroom1_heaters_2 -> bathroom1_box: Кабель 3x2.5мм² | Полотенцесушитель
+
+# === САНУЗЕЛ 2 ===
+main_panel.bathroom2_group.bathroom2_1 -> bathroom2_box: Кабель 3x2.5мм² | Розетки
+
+# === ПОСТИРОЧНАЯ ===
+main_panel.laundry_group.laundry_1 -> washer_out: Кабель 3x2.5мм² | 🔌 Стиральная машина
+main_panel.laundry_group.laundry_2 -> laundry_box: Кабель 3x2.5мм² | Полотенцесушитель
+main_panel.laundry_group.laundry_3 -> laundry_box: Кабель 3x2.5мм² | 🔌 Розетка ИБП
+
+# === РОЗЕТКИ ЖИЛЫХ ПОМЕЩЕНИЙ ===
+main_panel.sockets_group.sockets_1 -> smart_hub: Кабель 3x2.5мм² | Розетки гостиной
+main_panel.sockets_group.sockets_2 -> bedroom_box: Кабель 3x2.5мм² | Розетки спальни
+main_panel.sockets_group.sockets_3 -> kids_box: Кабель 3x2.5мм² | Розетки детской
+main_panel.sockets_group.sockets_4 -> hallway_box: Кабель 3x2.5мм² | Розетки коридора
+
+# === КОНДИЦИОНЕРЫ ===
+main_panel.ac_group.ac_1 -> smart_hub: Кабель 3x2.5мм² | ❄️ Кондиционер гостиной
+main_panel.ac_group.ac_2 -> bedroom_box: Кабель 3x2.5мм² | ❄️ Кондиционер спальни
 
 # РАСПОЛОЖЕНИЕ НА ПЛАНЕ
 main_panel -> smart_hub
@@ -18,3 +54,4 @@ bedroom_box -> kids_box
 kids_box -> hallway_box
 hallway_box -> bathroom1_box
 hallway_box -> bathroom2_box
+hallway_box -> laundry_box
