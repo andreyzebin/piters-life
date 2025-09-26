@@ -1,8 +1,8 @@
 # ОСНОВНОЙ ЩИТ
 main_panel: Главный щит {
   shape: rectangle
-  width: 280
-  height: 540
+  width: 300
+  height: 600
   style: {
     stroke: "#333333"
     fill: "#BBDAFF"
@@ -15,6 +15,33 @@ main_panel: Главный щит {
   fire_rcd: УЗО селективное 100мА (тип S)
 
   main_breaker -> counter -> fire_rcd
+
+  # === ИСТОЧНИК БЕСПЕРЕБОЙНОГО ПИТАНИЯ ===
+  ups_system: {
+    shape: rectangle
+    style: {
+      stroke: "#FF6D00"
+      fill: "#FFF3E0"
+      stroke-width: 2
+    }
+
+    ups_label: ИБП СИСТЕМА УМНОГО ДОМА {
+      style: {
+        font-size: 12
+        bold: true
+      }
+    }
+
+    ups_input: Вход ИБП | Розетка постирочной
+    ups_unit: ИБП 1000VA/600W
+    ups_output_poe: Выход PoE | 48V DC
+    ups_output_12v: Выход 12V DC
+    ups_battery: Аккумулятор 7Ah
+
+    ups_input -> ups_unit -> ups_output_poe
+    ups_unit -> ups_output_12v
+    ups_unit -> ups_battery
+  }
 
   # === ОСВЕЩЕНИЕ (30мА) ===
   lighting_group: {
@@ -257,4 +284,7 @@ main_panel: Главный щит {
   fire_rcd -> laundry_group.laundry_label
   fire_rcd -> sockets_group.sockets_label
   fire_rcd -> ac_group.ac_label
+
+  # Питание ИБП от розетки постирочной
+  laundry_group.laundry_3 -> ups_system.ups_input: Кабель 3x2.5мм²
 }

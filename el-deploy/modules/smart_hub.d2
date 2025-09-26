@@ -1,34 +1,37 @@
 # УМНЫЙ ХАБ ГОСТИНАЯ+КУХНЯ
 smart_hub: Умный хаб Гостиная+Кухня {
   shape: rectangle
-  width: 220
-  height: 500
+  width: 240
+  height: 550
   style: {
     stroke: "#1565C0"
     fill: "#E3F2FD"
     stroke-width: 3
   }
 
-  # Входные линии (Гостиная - Освещение)
+  # Питание по PoE от ИБП
+  network: Ethernet шлюз PoE {
+    poe_input: Вход PoE 48V
+    data_port: Данные Ethernet
+  }
+
+  # Преобразователь PoE в DC
+  poe_splitter: Преобразователь PoE->DC {
+    input: PoE 48V
+    output_12v: 12V DC
+    output_5v: 5V DC
+  }
+
+  # Входные линии силового питания
   power_in_light_lr: Питание освещение гостиная
-
-  # Входные линии (Гостиная - Розетки)
   power_in_sockets_lr: Питание розетки гостиная
-
-  # Входные линии (Кухня - Освещение)
   power_in_light_kitchen: Питание освещение кухня
-
-  # Входные линии (Кухня - Розетки столешницы)
   power_in_sockets_kitchen: Питание розетки столешницы
-
-  # Входные линии (Кухня - Техника)
   power_in_dishwasher: Питание посудомоечная машина
   power_in_hood: Питание вытяжка
-
-  # Входные линии (Кондиционер)
   power_in_ac: Питание кондиционер
 
-  # Релейные модули (Гостиная - Освещение)
+  # Релейные модули (питание от PoE)
   relays_light_lr: {
     Реле 1: Люстра диванная
     Реле 2: Споты диванные
@@ -36,38 +39,47 @@ smart_hub: Умный хаб Гостиная+Кухня {
     Реле 4: Люстра обеденная
   }
 
-  # Релейные модули (Гостиная - Розетки)
   relays_sockets_lr: {
     Реле 5: Розетки диван
     Реле 6: Розетки обед
     Реле 7: Розетки TV
   }
 
-  # Релейные модули (Кухня - Освещение)
   relays_light_kitchen: {
     Реле 8: Подсветка кухня
   }
 
-  # Релейные модули (Кухня - Розетки)
   relays_sockets_kitchen: {
     Реле 9: Розетки кухня рабочие
   }
 
-  # Релейные модули (Кухня - Техника)
   relays_appliances_kitchen: {
     Реле 10: Посудомоечная машина
     Реле 11: Вытяжка
   }
 
-  # Релейные модули (Кондиционер)
   relays_ac: {
     Реле 12: Кондиционер гостиной
   }
 
-  # Сетевой шлюз
-  network: Ethernet шлюз
+  # Контроллер умного дома (питание от PoE)
+  controller: Контроллер УД {
+    power: 5V от PoE
+    zigbee: Модуль Zigbee
+    wifi: Модуль Wi-Fi
+  }
 
-  # Подключение питания к реле
+  # Подключение питания
+  network.poe_input -> poe_splitter.input
+  poe_splitter.output_12v -> relays_light_lr
+  poe_splitter.output_12v -> relays_sockets_lr
+  poe_splitter.output_12v -> relays_light_kitchen
+  poe_splitter.output_12v -> relays_sockets_kitchen
+  poe_splitter.output_12v -> relays_appliances_kitchen
+  poe_splitter.output_12v -> relays_ac
+  poe_splitter.output_5v -> controller.power
+
+  # Подключение силовых линий к реле
   power_in_light_lr -> relays_light_lr
   power_in_sockets_lr -> relays_sockets_lr
   power_in_light_kitchen -> relays_light_kitchen
@@ -76,11 +88,12 @@ smart_hub: Умный хаб Гостиная+Кухня {
   power_in_hood -> relays_appliances_kitchen
   power_in_ac -> relays_ac
 
-  # Подключение к сети
-  relays_light_lr -> network
-  relays_sockets_lr -> network
-  relays_light_kitchen -> network
-  relays_sockets_kitchen -> network
-  relays_appliances_kitchen -> network
-  relays_ac -> network
+  # Подключение к сети и контроллеру
+  network.data_port -> controller.wifi
+  controller.zigbee -> relays_light_lr
+  controller.zigbee -> relays_sockets_lr
+  controller.zigbee -> relays_light_kitchen
+  controller.zigbee -> relays_sockets_kitchen
+  controller.zigbee -> relays_appliances_kitchen
+  controller.zigbee -> relays_ac
 }

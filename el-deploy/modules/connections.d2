@@ -1,5 +1,9 @@
 # ПОДКЛЮЧЕНИЕ ОСНОВНОГО ЩИТА К УЗЛАМ
 
+# === ПИТАНИЕ POE ОТ ИБП ===
+main_panel.ups_system.ups_output_poe -> poe_switch: Кабель Ethernet | 🔌 PoE 48V DC
+poe_switch -> smart_hub.network: Витая пара Cat6 | 📶 Данные + Питание
+
 # === ОСВЕЩЕНИЕ ===
 main_panel.lighting_group.lighting_1 -> smart_hub: Кабель 3x1.5мм² | Освещение кухни
 main_panel.lighting_group.lighting_2 -> bathroom1_box: Кабель 3x1.5мм² | Освещение санузел1
@@ -35,7 +39,7 @@ main_panel.bathroom2_group.bathroom2_1 -> bathroom2_box: Кабель 3x2.5мм�
 # === ПОСТИРОЧНАЯ ===
 main_panel.laundry_group.laundry_1 -> washer_out: Кабель 3x2.5мм² | 🔌 Стиральная машина
 main_panel.laundry_group.laundry_2 -> laundry_box: Кабель 3x2.5мм² | Полотенцесушитель
-main_panel.laundry_group.laundry_3 -> laundry_box: Кабель 3x2.5мм² | 🔌 Розетка ИБП
+main_panel.laundry_group.laundry_3 -> main_panel.ups_system.ups_input: Кабель 3x2.5мм² | 🔌 Питание ИБП
 
 # === РОЗЕТКИ ЖИЛЫХ ПОМЕЩЕНИЙ ===
 main_panel.sockets_group.sockets_1 -> smart_hub: Кабель 3x2.5мм² | Розетки гостиной
@@ -46,6 +50,13 @@ main_panel.sockets_group.sockets_4 -> hallway_box: Кабель 3x2.5мм² | Р
 # === КОНДИЦИОНЕРЫ ===
 main_panel.ac_group.ac_1 -> smart_hub: Кабель 3x2.5мм² | ❄️ Кондиционер гостиной
 main_panel.ac_group.ac_2 -> bedroom_box: Кабель 3x2.5мм² | ❄️ Кондиционер спальни
+
+# === СЛАБОТОЧНОЕ ОБОРУДОВАНИЕ ОТ ИБП ===
+main_panel.ups_system.ups_output_12v -> low_voltage_equipment: Кабель 2x1.5мм² | 12V DC
+low_voltage_equipment -> zigbee_hub: 📶 Zigbee Hub
+low_voltage_equipment -> wifi_router: 📶 Wi-Fi роутер
+low_voltage_equipment -> home_assistant: 🏠 Home Assistant
+low_voltage_equipment -> leak_sensors: 💧 Датчики протечки
 
 # РАСПОЛОЖЕНИЕ НА ПЛАНЕ
 main_panel -> smart_hub
