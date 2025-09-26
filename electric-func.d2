@@ -87,8 +87,9 @@ group1: {
         fill: "#FFF9C4"
       }
       label: 🔘 Люстра
-      pass1: Вход
-      pass2: У кровати
+      pass1: Проходной у входа
+      pass2: Проходной у кровати
+      pass1 <-> pass2
     }
 
     spots_switches: {
@@ -97,8 +98,9 @@ group1: {
         fill: "#FFF9C4"
       }
       label: 🔘 Споты
-      pass1: Вход
-      pass2: У кровати
+      pass1: Проходной у входа
+      pass2: Проходной у кровати
+      pass1 <-> pass2
     }
   }
 
@@ -202,6 +204,8 @@ group2: {
       label: 🌬️ Вентиляция
       fan: Вентилятор
       timer_relay: ⏱️ Реле времени
+      fan_switch: Выключатель
+      fan_switch -> timer_relay
     }
   }
 
@@ -220,6 +224,8 @@ group2: {
       label: 🌬️ Вентиляция
       fan: Вентилятор
       timer_relay: ⏱️ Реле времени
+      fan_switch: Выключатель
+      fan_switch -> timer_relay
     }
     leak_sensor: 💧 Датчик протечки
   }
@@ -289,6 +295,14 @@ smart_home: УМНЫЙ ДОМ {
   }
 }
 
+smart_living_room: УМНЫЙ ДОМ. ГОСТИНАЯ {
+  shape: cylinder
+  style: {
+    stroke: "#333333"
+    fill: "#E1BEE7"
+  }
+}
+
 # === КОНТРОЛЛЕР ПРОТЕЧЕК ===
 leak_protection: {
   shape: rectangle
@@ -329,6 +343,14 @@ smart_home -> group1.hallway.motion_sensor
 smart_home -> group2.kitchen.night_light
 smart_home -> group2.bathroom1.night_light
 smart_home -> group1.hallway.night_light
+
+smart_living_room -> group2.kitchen.chandelier_dining
+smart_living_room -> group2.kitchen.lighting
+smart_living_room -> group1.living_room.chandelier_sofa
+smart_living_room -> group1.living_room.spots_sofa
+smart_living_room -> group1.living_room.spots_dining
+
+smart_home -> smart_living_room
 
 # === МАСТЕР-ВЫКЛЮЧАТЕЛЬ ===
 master_control: Мастер-выключатель {
