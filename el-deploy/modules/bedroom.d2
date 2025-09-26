@@ -1,0 +1,36 @@
+# РАСПРЕДКОРОБКА СПАЛЬНИ
+bedroom_box: Распредкоробка Спальня {
+  shape: rectangle
+  width: 120
+  height: 200
+  style: {
+    stroke: "#666666"
+    fill: "#F5F5F5"
+    stroke-width: 2
+  }
+
+  # Входные линии
+  power_in: Питание
+  light_loop: Шлейф света
+
+  # Выходы к потребителям
+  socket1: Розетка прикроватная 1
+  socket2: Розетка прикроватная 2
+  socket3: Розетка TV
+  socket4: Розетка гардероб
+  light1: Люстра
+  light2: Споты
+  switch1: Выключатель вход
+  switch2: Выключатель кровать
+  ac: Кондиционер
+
+  power_in -> socket1
+  power_in -> socket2
+  power_in -> socket3
+  power_in -> socket4
+  power_in -> ac
+  light_loop -> light1
+  light_loop -> light2
+  light_loop -> switch1
+  light_loop -> switch2
+}

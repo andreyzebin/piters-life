@@ -1,0 +1,20 @@
+# ПОДКЛЮЧЕНИЕ ОСНОВНОГО ЩИТА К УЗЛАМ
+main_panel.group1 -> smart_hub: Кабель 3x4мм²
+main_panel.group2 -> bedroom_box.power_in: Кабель 3x2.5мм²
+main_panel.group2 -> kids_box.power_in: Кабель 3x2.5мм²
+main_panel.group3 -> bathroom1_box.power_in: Кабель 3x2.5мм²
+main_panel.group3 -> bathroom2_box.power_in: Кабель 3x2.5мм²
+main_panel.group4 -> hallway_box.power_in: Кабель 3x2.5мм²
+
+# ПРЯМЫЕ ПОДКЛЮЧЕНИЯ ИЗ ГЛАВНОГО ЩИТА
+main_panel.group5 -> stove_out: 🔌 Плита
+main_panel.group6 -> waterheater_out: 🔌 Бойлер
+main_panel.group7 -> washer_out: 🔌 Стиральная
+
+# РАСПОЛОЖЕНИЕ НА ПЛАНЕ
+main_panel -> smart_hub
+smart_hub -> bedroom_box
+bedroom_box -> kids_box
+kids_box -> hallway_box
+hallway_box -> bathroom1_box
+hallway_box -> bathroom2_box

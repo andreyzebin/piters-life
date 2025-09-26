@@ -1,0 +1,34 @@
+# ОСНОВНОЙ ЩИТ
+main_panel: Главный щит {
+  shape: rectangle
+  width: 200
+  height: 300
+  style: {
+    stroke: "#333333"
+    fill: "#BBDAFF"
+    stroke-width: 3
+  }
+
+  # Вводные устройства
+  main_breaker: Вводной автомат C63
+  counter: Счётчик
+  fire_rcd: УЗО 100мА
+
+  # Групповые автоматы
+  group1: УЗО 30мА Гостиная+Кухня
+  group2: УЗО 30мА Спальня+Детская
+  group3: УЗО 10мА Санузлы
+  group4: Автомат 16А Коридор
+  group5: Автомат 25А Плита
+  group6: Автомат 20А Бойлер
+  group7: Автомат 16А Стиральная
+
+  main_breaker -> counter -> fire_rcd
+  fire_rcd -> group1
+  fire_rcd -> group2
+  fire_rcd -> group3
+  fire_rcd -> group4
+  fire_rcd -> group5
+  fire_rcd -> group6
+  fire_rcd -> group7
+}
