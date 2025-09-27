@@ -1,8 +1,8 @@
 # УМНЫЙ ХАБ ГОСТИНАЯ+КУХНЯ
 smart_hub: Умный хаб Гостиная+Кухня {
   shape: rectangle
-  width: 240
-  height: 550
+  width: 280
+  height: 700
   style: {
     stroke: "#1565C0"
     fill: "#E3F2FD"
@@ -31,69 +31,150 @@ smart_hub: Умный хаб Гостиная+Кухня {
   power_in_hood: Питание вытяжка
   power_in_ac: Питание кондиционер
 
-  # Релейные модули (питание от PoE)
-  relays_light_lr: {
-    Реле 1: Люстра диванная
-    Реле 2: Споты диванные
-    Реле 3: Споты обеденные
-    Реле 4: Люстра обеденная
+  # === РЕЛЕЙНЫЕ МОДУЛИ ===
+  relays_kitchen: {
+    Реле 1: Розетки рабочие
+    Реле 2: Люстра обеденная
+    Реле 3: Подсветка кухни
+    Реле 4: Вытяжка
+    Реле 5: Посудомоечная машина
+    Реле 6: Холодильник
   }
 
-  relays_sockets_lr: {
-    Реле 5: Розетки диван
-    Реле 6: Розетки обед
-    Реле 7: Розетки TV
+  relays_living: {
+    Реле 7: Люстра диванная
+    Реле 8: Споты обеденные
+    Реле 9: Споты диванные
+    Реле 10: Розетки TV/диван
+    Реле 11: Розетки обеденные
+    Реле 12: Кондиционер
   }
 
-  relays_light_kitchen: {
-    Реле 8: Подсветка кухня
-  }
-
-  relays_sockets_kitchen: {
-    Реле 9: Розетки кухня рабочие
-  }
-
-  relays_appliances_kitchen: {
-    Реле 10: Посудомоечная машина
-    Реле 11: Вытяжка
-  }
-
-  relays_ac: {
-    Реле 12: Кондиционер гостиной
-  }
-
-  # Контроллер умного дома (питание от PoE)
+  # Контроллер умного дома
   controller: Контроллер УД {
     power: 5V от PoE
     zigbee: Модуль Zigbee
     wifi: Модуль Wi-Fi
   }
 
-  # Подключение питания
+  # === СИСТЕМА ПИТАНИЯ ===
   network.poe_input -> poe_splitter.input
-  poe_splitter.output_12v -> relays_light_lr
-  poe_splitter.output_12v -> relays_sockets_lr
-  poe_splitter.output_12v -> relays_light_kitchen
-  poe_splitter.output_12v -> relays_sockets_kitchen
-  poe_splitter.output_12v -> relays_appliances_kitchen
-  poe_splitter.output_12v -> relays_ac
+  poe_splitter.output_12v -> relays_kitchen
+  poe_splitter.output_12v -> relays_living
   poe_splitter.output_5v -> controller.power
 
   # Подключение силовых линий к реле
-  power_in_light_lr -> relays_light_lr
-  power_in_sockets_lr -> relays_sockets_lr
-  power_in_light_kitchen -> relays_light_kitchen
-  power_in_sockets_kitchen -> relays_sockets_kitchen
-  power_in_dishwasher -> relays_appliances_kitchen
-  power_in_hood -> relays_appliances_kitchen
-  power_in_ac -> relays_ac
+  power_in_light_kitchen -> relays_kitchen.Реле 2
+  power_in_light_kitchen -> relays_kitchen.Реле 3
+  power_in_sockets_kitchen -> relays_kitchen.Реле 1
+  power_in_hood -> relays_kitchen.Реле 4
+  power_in_dishwasher -> relays_kitchen.Реле 5
+  power_in_light_lr -> relays_living.Реле 7
+  power_in_light_lr -> relays_living.Реле 8
+  power_in_light_lr -> relays_living.Реле 9
+  power_in_sockets_lr -> relays_living.Реле 10
+  power_in_sockets_lr -> relays_living.Реле 11
+  power_in_ac -> relays_living.Реле 12
 
   # Подключение к сети и контроллеру
   network.data_port -> controller.wifi
-  controller.zigbee -> relays_light_lr
-  controller.zigbee -> relays_sockets_lr
-  controller.zigbee -> relays_light_kitchen
-  controller.zigbee -> relays_sockets_kitchen
-  controller.zigbee -> relays_appliances_kitchen
-  controller.zigbee -> relays_ac
+  controller.zigbee -> relays_kitchen
+  controller.zigbee -> relays_living
+}
+
+# === ВЫХОДЫ ИЗ УМНОГО ХАБА ===
+
+# КУХНЯ
+smart_hub -> kitchen.socket_1: 🔌 Розетка рабочая 1
+smart_hub -> kitchen.dining_switch: 🔘 Выключатель обеденная зона (2x кнопочный)
+smart_hub -> kitchen.dining_chandelier: 💡 Люстра обеденная
+smart_hub -> kitchen.lighting: 💡 Подсветка кухни
+smart_hub -> kitchen.hood: 💨 Вытяжка
+smart_hub -> kitchen.dishwasher: 🍽️ Посудомоечная машина
+smart_hub -> kitchen.socket_2: 🔌 Розетка рабочая 2
+smart_hub -> kitchen.socket_3: 🔌 Розетка рабочая 3
+smart_hub -> kitchen.socket_fridge: 🔌 Розетка холодильник
+
+# ГОСТИНАЯ
+smart_hub -> living.chandelier: 💡 Люстра диванная
+smart_hub -> living.dining_spots: 💡 Споты обеденные
+smart_hub -> living.spots: 💡 Споты диванные
+smart_hub -> living.switch: 🔘 Выключатель (3x кнопочный)
+smart_hub -> living.socket_tv: 🔌 Розетка TV
+smart_hub -> living.socket_sofa_1: 🔌 Розетка диван 1
+smart_hub -> living.socket_sofa_2: 🔌 Розетка диван 2
+smart_hub -> living.socket_dining_1: 🔌 Розетка обеденная 1
+smart_hub -> living.socket_dining_2: 🔌 Розетка обеденная 2
+smart_hub -> living.ac: ❄️ Кондиционер
+
+# ДОПОЛНИТЕЛЬНЫЕ ВЫХОДЫ
+smart_hub -> living.switch_entrance: 🔘 Выключатель вход (3x кнопочный)
+smart_hub -> living.switch_sofa: 🔘 Выключатель диванная зона (2x кнопочный)
+smart_hub -> kitchen.switch_working: 🔘 Выключатель рабочая зона (2x кнопочный)
+
+# === ПОДКЛЮЧЕНИЕ РЕЛЕ К ВЫХОДАМ ===
+
+# Кухня
+smart_hub.relays_kitchen.Реле 1 -> kitchen.socket_1
+smart_hub.relays_kitchen.Реле 1 -> kitchen.socket_2
+smart_hub.relays_kitchen.Реле 1 -> kitchen.socket_3
+smart_hub.relays_kitchen.Реле 2 -> kitchen.dining_chandelier
+smart_hub.relays_kitchen.Реле 3 -> kitchen.lighting
+smart_hub.relays_kitchen.Реле 4 -> kitchen.hood
+smart_hub.relays_kitchen.Реле 5 -> kitchen.dishwasher
+smart_hub.relays_kitchen.Реле 6 -> kitchen.socket_fridge
+
+# Гостиная
+smart_hub.relays_living.Реле 7 -> living.chandelier
+smart_hub.relays_living.Реле 8 -> living.dining_spots
+smart_hub.relays_living.Реле 9 -> living.spots
+smart_hub.relays_living.Реле 10 -> living.socket_tv
+smart_hub.relays_living.Реле 10 -> living.socket_sofa_1
+smart_hub.relays_living.Реле 10 -> living.socket_sofa_2
+smart_hub.relays_living.Реле 11 -> living.socket_dining_1
+smart_hub.relays_living.Реле 11 -> living.socket_dining_2
+smart_hub.relays_living.Реле 12 -> living.ac
+
+# === ПОДКЛЮЧЕНИЕ ВЫКЛЮЧАТЕЛЕЙ К КОНТРОЛЛЕРУ ===
+kitchen.dining_switch -> smart_hub.controller.zigbee: 📶 Zigbee сигнал
+living.switch -> smart_hub.controller.zigbee: 📶 Zigbee сигнал
+living.switch_entrance -> smart_hub.controller.zigbee: 📶 Zigbee сигнал
+living.switch_sofa -> smart_hub.controller.zigbee: 📶 Zigbee сигнал
+kitchen.switch_working -> smart_hub.controller.zigbee: 📶 Zigbee сигнал
+
+# === ГРУППИРОВКА ВЫХОДОВ ДЛЯ ЧИТАЕМОСТИ ===
+kitchen: КУХНЯ {
+  shape: rectangle
+  style: {
+    fill: "#FFF9C4"
+  }
+  socket_1: 🔌 Розетка рабочая 1
+  dining_switch: 🔘 Выключатель обеденная зона (2x кнопочный)
+  dining_chandelier: 💡 Люстра обеденная
+  lighting: 💡 Подсветка кухни
+  hood: 💨 Вытяжка
+  dishwasher: 🍽️ Посудомоечная машина
+  socket_2: 🔌 Розетка рабочая 2
+  socket_3: 🔌 Розетка рабочая 3
+  socket_fridge: 🔌 Розетка холодильник
+  switch_working: 🔘 Выключатель рабочая зона (2x кнопочный)
+}
+
+living: ГОСТИНАЯ {
+  shape: rectangle
+  style: {
+    fill: "#E8F5E9"
+  }
+  chandelier: 💡 Люстра диванная
+  dining_spots: 💡 Споты обеденные
+  spots: 💡 Споты диванные
+  switch: 🔘 Выключатель (3x кнопочный)
+  socket_tv: 🔌 Розетка TV
+  socket_sofa_1: 🔌 Розетка диван 1
+  socket_sofa_2: 🔌 Розетка диван 2
+  socket_dining_1: 🔌 Розетка обеденная 1
+  socket_dining_2: 🔌 Розетка обеденная 2
+  ac: ❄️ Кондиционер
+  switch_entrance: 🔘 Выключатель вход (3x кнопочный)
+  switch_sofa: 🔘 Выключатель диванная зона (2x кнопочный)
 }

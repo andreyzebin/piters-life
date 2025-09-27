@@ -1,8 +1,8 @@
 # ОСНОВНОЙ ЩИТ
 main_panel: Главный щит {
   shape: rectangle
-  width: 300
-  height: 600
+  width: 320
+  height: 650
   style: {
     stroke: "#333333"
     fill: "#BBDAFF"
@@ -16,29 +16,28 @@ main_panel: Главный щит {
 
   main_breaker -> counter -> fire_rcd
 
-  # === ИСТОЧНИК БЕСПЕРЕБОЙНОГО ПИТАНИЯ ===
-  ups_system: {
+  # === ИСТОЧНИК БЕСПЕРЕБОЙНОГО ПИТАНИЯ (отдельное УЗО) ===
+  ups_group: {
     shape: rectangle
     style: {
       stroke: "#FF6D00"
       fill: "#FFF3E0"
-      stroke-width: 2
     }
 
-    ups_label: ИБП СИСТЕМА УМНОГО ДОМА {
+    ups_label: ИБП СИСТЕМА УМНОГО ДОМА | УЗО 16А/30мА (тип А) {
       style: {
         font-size: 12
         bold: true
       }
     }
 
-    ups_input: Вход ИБП | Розетка постирочной
+    ups_breaker: Автомат 10А ИБП
     ups_unit: ИБП 1000VA/600W
     ups_output_poe: Выход PoE | 48V DC
     ups_output_12v: Выход 12V DC
     ups_battery: Аккумулятор 7Ah
 
-    ups_input -> ups_unit -> ups_output_poe
+    ups_label -> ups_breaker -> ups_unit -> ups_output_poe
     ups_unit -> ups_output_12v
     ups_unit -> ups_battery
   }
@@ -58,23 +57,45 @@ main_panel: Главный щит {
       }
     }
 
-    lighting_1: Автомат 10А Освещение кухни
-    lighting_2: Автомат 10А Освещение санузлов
-    lighting_3: Автомат 10А Освещение постирочной
-    lighting_4: Автомат 10А Освещение гостиной
-    lighting_5: Автомат 10А Освещение спальни
-    lighting_6: Автомат 10А Освещение детской
-    lighting_7: Автомат 10А Освещение коридора
-    lighting_8: Автомат 10А Вентиляторы санузлов
+    # Реле выключения всей группы освещения
+    lighting_master_relay: 🎛️ Реле мастер-выключения освещения
 
-    lighting_label -> lighting_1
-    lighting_label -> lighting_2
-    lighting_label -> lighting_3
-    lighting_label -> lighting_4
-    lighting_label -> lighting_5
-    lighting_label -> lighting_6
-    lighting_label -> lighting_7
-    lighting_label -> lighting_8
+    # === ПОДГРУППА: ОСВЕЩЕНИЕ КУХНИ И ГОСТИНОЙ ===
+    lighting_kitchen_living: {
+      shape: rectangle
+      style: {
+        fill: "#BBDEFB"
+      }
+
+      kitchen_living_label: Подгруппа: Кухня+Гостиная
+      kitchen_living_relay: 🎛️ Реле управления подгруппой
+
+      lighting_1: Автомат 10А Освещение кухни
+      lighting_2: Автомат 10А Освещение гостиной
+      lighting_3: Автомат 10А Вытяжка кухни
+
+      kitchen_living_label -> kitchen_living_relay
+      kitchen_living_relay -> lighting_1
+      kitchen_living_relay -> lighting_2
+      kitchen_living_relay -> lighting_3
+    }
+
+    # Остальное освещение
+    lighting_4: Автомат 10А Освещение санузлов
+    lighting_5: Автомат 10А Освещение постирочной
+    lighting_6: Автомат 10А Освещение спальни
+    lighting_7: Автомат 10А Освещение детской
+    lighting_8: Автомат 10А Освещение коридора
+    lighting_9: Автомат 10А Вентиляторы санузлов
+
+    lighting_label -> lighting_master_relay
+    lighting_master_relay -> lighting_kitchen_living.kitchen_living_label
+    lighting_master_relay -> lighting_4
+    lighting_master_relay -> lighting_5
+    lighting_master_relay -> lighting_6
+    lighting_master_relay -> lighting_7
+    lighting_master_relay -> lighting_8
+    lighting_master_relay -> lighting_9
   }
 
   # === РОЗЕТКИ КУХНИ (10мА) ===
@@ -113,10 +134,8 @@ main_panel: Главный щит {
     }
 
     kitchen_appliances_1: Автомат 16А Посудомоечная машина
-    kitchen_appliances_2: Автомат 16А Вытяжка
 
     kitchen_appliances_label -> kitchen_appliances_1
-    kitchen_appliances_label -> kitchen_appliances_2
   }
 
   # === ПЛИТА КУХОННАЯ ===
@@ -218,11 +237,9 @@ main_panel: Главный щит {
 
     laundry_1: Автомат 16А Стиральная машина
     laundry_2: Автомат 16А Полотенцесушитель
-    laundry_3: Автомат 10А Розетка ИБП
 
     laundry_label -> laundry_1
     laundry_label -> laundry_2
-    laundry_label -> laundry_3
   }
 
   # === РОЗЕТКИ ЖИЛЫХ ПОМЕЩЕНИЙ (30мА) ===
@@ -274,6 +291,7 @@ main_panel: Главный щит {
   }
 
   # Подключение групп к противопожарному УЗО
+  fire_rcd -> ups_group.ups_label
   fire_rcd -> lighting_group.lighting_label
   fire_rcd -> kitchen_sockets_group.kitchen_sockets_label
   fire_rcd -> kitchen_appliances_group.kitchen_appliances_label
@@ -284,7 +302,4 @@ main_panel: Главный щит {
   fire_rcd -> laundry_group.laundry_label
   fire_rcd -> sockets_group.sockets_label
   fire_rcd -> ac_group.ac_label
-
-  # Питание ИБП от розетки постирочной
-  laundry_group.laundry_3 -> ups_system.ups_input: Кабель 3x2.5мм²
 }
