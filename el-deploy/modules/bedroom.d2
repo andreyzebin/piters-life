@@ -10,27 +10,43 @@ bedroom_box: Распредкоробка Спальня {
   }
 
   # Входные линии
-  power_in: Питание
-  light_loop: Шлейф света
+  power: Питание
 
-  # Выходы к потребителям
-  socket1: Розетка прикроватная 1
-  socket2: Розетка прикроватная 2
-  socket3: Розетка TV
-  socket4: Розетка гардероб
-  light1: Люстра
-  light2: Споты
-  switch1: Выключатель вход
-  switch2: Выключатель кровать
-  ac: Кондиционер
 
-  power_in -> socket1
-  power_in -> socket2
-  power_in -> socket3
-  power_in -> socket4
-  power_in -> ac
-  light_loop -> light1
-  light_loop -> light2
-  light_loop -> switch1
-  light_loop -> switch2
+  switch1: Выключатель проходной люстра
+  switch2: Выключатель проходной споты
+
+
+
+}
+
+  bedroom_box.power -> bedroom.socket_tv
+  bedroom_box.power -> bedroom.socket_1
+  bedroom_box.power -> bedroom.socket_2
+  bedroom_box.power -> bedroom.ac
+  bedroom_box.power -> bedroom.socket_tv
+
+
+  bedroom_box.switch1 -> bedroom.switch_entrance
+  bedroom_box.switch1 -> bedroom.switch_bed
+  bedroom_box.switch1 -> bedroom.chandelier
+
+  bedroom_box.switch2 -> bedroom.switch_entrance
+  bedroom_box.switch2 -> bedroom.switch_bed
+  bedroom_box.switch2 -> bedroom.spots
+
+bedroom: СПАЛЬНЯ {
+  shape: rectangle
+  style: {
+    fill: "#E8F5E9"
+  }
+  chandelier: 💡 Люстра
+  spots: 💡 Споты
+
+  socket_tv: 🔌 Розетка TV
+  socket_1: 🔌 Розетка 1
+  socket_2: 🔌 Розетка 2
+  ac: ❄️ Кондиционер
+  switch_entrance: 🔘 Выключатель вход (2x кнопочный)
+  switch_bed: 🔘 Выключатель кровать (2x кнопочный)
 }
