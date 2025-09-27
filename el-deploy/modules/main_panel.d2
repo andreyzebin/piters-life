@@ -68,16 +68,14 @@ main_panel: Главный щит {
       }
 
       kitchen_living_label: Подгруппа: Кухня+Гостиная
-      kitchen_living_relay: 🎛️ Реле управления подгруппой
 
       lighting_1: Автомат 10А Освещение кухни
       lighting_2: Автомат 10А Освещение гостиной
       lighting_3: Автомат 10А Вытяжка кухни
 
-      kitchen_living_label -> kitchen_living_relay
-      kitchen_living_relay -> lighting_1
-      kitchen_living_relay -> lighting_2
-      kitchen_living_relay -> lighting_3
+      kitchen_living_label -> lighting_1
+      kitchen_living_label -> lighting_2
+      kitchen_living_label -> lighting_3
     }
 
     # Остальное освещение
