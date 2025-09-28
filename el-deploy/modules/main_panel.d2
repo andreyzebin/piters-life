@@ -259,6 +259,7 @@ main_panel: Главный щит {
     sockets_2: Автомат 16А Розетки спальни
     sockets_3: Автомат 16А Розетки детской
     sockets_4: Автомат 16А Розетки коридора
+    sockets_5: Автомат 16А Розетки постирочной
 
     sockets_label -> sockets_1
     sockets_label -> sockets_2
@@ -306,6 +307,8 @@ network_hub: Серверная {
  ups: Бесперебойник
  ethernet_router: Сетевой роутер
  ethernet_router -> ups
+ wifi_router -> ups
+
  wifi_router: Wi-Fi роутер
  wifi_router -> ethernet_router
  
@@ -317,6 +320,8 @@ network_hub.ethernet_router -> living.tv_stand_sockets.socket_ethernet
 
 network_hub.ups -> laundry_sockets.socket_1
 
+sockets_group.sockets_5 -> laundry_sockets.socket_1
+sockets_group.sockets_5 -> laundry_sockets.socket_2
 
 laundry_sockets: Розетки постирочной {
  socket_1: Розетка 1
