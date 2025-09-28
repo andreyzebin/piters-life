@@ -312,8 +312,9 @@ network_hub: Серверная {
  wifi_router: Wi-Fi роутер
  wifi_router -> ethernet_router
  
- internet_gateway -> ethernet_router
+
 }
+internet_gateway -> network_hub.ethernet_router
 
 network_hub.ethernet_router -> living.tv_sockets.socket_ethernet
 network_hub.ethernet_router -> living.tv_stand_sockets.socket_ethernet
