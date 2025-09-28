@@ -28,15 +28,15 @@ smart_hub: Умный хаб Гостиная+Кухня {
 # === ПОДКЛЮЧЕНИЕ РЕЛЕ К ВЫХОДАМ ===
 
 # Кухня
-smart_hub.kitchen_power -> kitchen.socket_1
-smart_hub.kitchen_power -> kitchen.socket_2
-smart_hub.kitchen_power -> kitchen.socket_3
+smart_hub.kitchen_power -> kitchen.framework_sockets.socket_1
+smart_hub.kitchen_power -> kitchen.framework_sockets.socket_2
+smart_hub.kitchen_power -> kitchen.framework_sockets.socket_3
 
 smart_hub.relays_kitchen.dining_chandelier_controller -> kitchen.dining_chandelier
-smart_hub.relays_kitchen.dining_chandelier_controller -> kitchen.switch_working
+smart_hub.relays_kitchen.dining_chandelier_controller -> kitchen.framework_sockets.switch_working
 
 smart_hub.relays_kitchen.kitchen_light_controller -> kitchen.lighting
-smart_hub.relays_kitchen.kitchen_light_controller -> kitchen.switch_working
+smart_hub.relays_kitchen.kitchen_light_controller -> kitchen.framework_sockets.switch_working
 
 smart_hub.kitchen_power -> kitchen.lighting
 smart_hub.kitchen_power -> kitchen.hood
@@ -56,9 +56,10 @@ smart_hub.relays_living.living_spots_controller -> living.switch_entrance
 
 
 
-smart_hub.living_power -> living.socket_tv
-smart_hub.living_power -> living.socket_sofa_1
-smart_hub.living_power -> living.socket_sofa_2
+smart_hub.living_power -> living.tv_sockets.socket_1
+smart_hub.living_power -> living.tv_sockets.socket_2
+smart_hub.living_power -> living.tv_stand_sockets.socket_sofa_1
+smart_hub.living_power -> living.tv_stand_sockets.socket_sofa_2
 smart_hub.living_power -> living.socket_dining_1
 smart_hub.living_power -> living.socket_dining_2
 smart_hub.living_power -> living.ac
@@ -71,15 +72,19 @@ kitchen: КУХНЯ {
   style: {
     fill: "#FFF9C4"
   }
-  socket_1: 🔌 Розетка рабочая 1
   dining_chandelier: 💡 Люстра обеденная
   lighting: 💡 Подсветка кухни
   hood: 💨 Вытяжка
   dishwasher: 🍽️ Посудомоечная машина
-  socket_2: 🔌 Розетка рабочая 2
-  socket_3: 🔌 Розетка рабочая 3
+
+  framework_sockets: Розетки рабочей зоны {
+      socket_1: 🔌 Розетка рабочая 1
+      socket_2: 🔌 Розетка рабочая 2
+      socket_3: 🔌 Розетка рабочая 3
+      switch_working: 🔘 Выключатель рабочая зона (2x кнопочный)
+  }
+
   socket_fridge: 🔌 Розетка холодильник
-  switch_working: 🔘 Выключатель рабочая зона (2x кнопочный)
 }
 
 living: ГОСТИНАЯ {
@@ -90,11 +95,25 @@ living: ГОСТИНАЯ {
   chandelier: 💡 Люстра диванная
   dining_spots: 💡 Споты обеденные
   spots: 💡 Споты диванные
-  socket_tv: 🔌 Розетка TV
-  socket_sofa_1: 🔌 Розетка диван 1
-  socket_sofa_2: 🔌 Розетка диван 2
+  tv_sockets: Розетки ТВ {
+    socket_1: 🔌 Розетка TV
+    socket_2: 🔌 Розетка TV 2
+    socket_ethernet: Ethernet сдвоенная
+    socket_hdmi: HDMI сдвоенная
+  }
+  tv_stand_sockets: Розетки ТВ тумбы {
+    socket_sofa_1: 🔌 Розетка диван 1
+    socket_sofa_2: 🔌 Розетка диван 2
+    socket_ethernet: Ethernet сдвоенная
+    socket_hdmi: HDMI сдвоенная
+  }
+
+  tv_sockets.socket_hdmi -> tv_stand_sockets.socket_hdmi
+
+
   socket_dining_1: 🔌 Розетка обеденная 1
   socket_dining_2: 🔌 Розетка обеденная 2
+
   ac: ❄️ Кондиционер
   switch_entrance: 🔘 Выключатель вход (3x кнопочный)
 }
