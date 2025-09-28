@@ -10,3 +10,7 @@
           --include-files '**/bedroom.d2' \
           --output-file tmp/all.png
 ```
+
+```bash
+./el-deploy/build.sh --include-files '**/smart_hub.d2'  --output-file tmp/smart_hub.png
+```
