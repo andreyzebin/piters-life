@@ -302,10 +302,24 @@ main_panel: Главный щит {
   fire_rcd -> ac_group.ac_label
 }
 
-network_hub: Коммутатор {
+network_hub: Серверная {
  ups: Бесперебойник
- network_switch: Сетевой коммутатор
+ ethernet_router: Сетевой роутер
+ ethernet_router -> ups
+ wifi_router: Wi-Fi роутер
+ wifi_router -> ethernet_router
+ 
+ internet_gateway -> ethernet_router
 }
 
-network_hub.network_switch -> living.tv_sockets.socket_ethernet
-network_hub.network_switch -> living.tv_stand_sockets.socket_ethernet
+network_hub.ethernet_router -> living.tv_sockets.socket_ethernet
+network_hub.ethernet_router -> living.tv_stand_sockets.socket_ethernet
+
+network_hub.ups -> laundry_sockets.socket_1
+
+
+laundry_sockets: Розетки постирочной {
+ socket_1: Розетка 1
+ socket_2: Розетка 2
+
+}
