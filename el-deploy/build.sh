@@ -7,15 +7,26 @@ set -e  # Выход при ошибке
 
 echo "🔌 Сборка схемы электропроводки..."
 
+# Определяем директорию, где находится скрипт
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+echo "📁 Директория скрипта: $SCRIPT_DIR"
+
 # Создаем временный каталог если не существует
-mkdir -p tmp/electro-build
+mkdir -p "$SCRIPT_DIR/tmp/electro-build"
+
+# Проверяем существование основного файла
+MAIN_D2="$SCRIPT_DIR/main.d2"
+if [ ! -f "$MAIN_D2" ]; then
+    echo "❌ Ошибка: main.d2 не найден в $SCRIPT_DIR"
+    exit 1
+fi
 
 # Копируем основной файл
-cp main.d2 tmp/all.d2
+cp "$MAIN_D2" "$SCRIPT_DIR/tmp/all.d2"
 
 # Добавляем содержимое всех модулей
-echo "" >> tmp/all.d2
-echo "# === ИМПОРТИРОВАННЫЕ МОДУЛИ ===" >> tmp/all.d2
+echo "" >> "$SCRIPT_DIR/tmp/all.d2"
+echo "# === ИМПОРТИРОВАННЫЕ МОДУЛИ ===" >> "$SCRIPT_DIR/tmp/all.d2"
 
 # Обработка параметров командной строки
 INCLUDE_FILTERS=()
@@ -108,21 +119,22 @@ should_include_file() {
 
 MODULES_ADDED=0
 
-echo "📂 Обрабатываем модули:"
-echo "📋 Все файлы: $(echo modules/*.d2)"
+MODULES_DIR="$SCRIPT_DIR/modules"
+echo "📂 Обрабатываем модули из: $MODULES_DIR"
+echo "📋 Все файлы: $(echo $MODULES_DIR/*.d2)"
 
 # ВРЕМЕННО отключаем set -e для цикла
 set +e
-for module in modules/*.d2; do
+for module in $MODULES_DIR/*.d2; do
     echo "🔄 Начало обработки: $module"
     if [ -f "$module" ]; then
         echo "🔍 Анализ модуля: $module"
         if should_include_file "$module"; then
             echo "🎯 Файл соответствует фильтрам"
-            echo "" >> tmp/all.d2
-            echo "# Модуль: $(basename $module)" >> tmp/all.d2
+            echo "" >> "$SCRIPT_DIR/tmp/all.d2"
+            echo "# Модуль: $(basename $module)" >> "$SCRIPT_DIR/tmp/all.d2"
             echo "📖 Чтение содержимого..."
-            cat "$module" >> tmp/all.d2
+            cat "$module" >> "$SCRIPT_DIR/tmp/all.d2"
             CAT_EXIT_CODE=$?
             echo "📖 Код выхода cat: $CAT_EXIT_CODE"
             if [ $CAT_EXIT_CODE -eq 0 ]; then
@@ -141,25 +153,25 @@ for module in modules/*.d2; do
 done
 set -e  # Включаем обратно
 
-echo "" >> tmp/all.d2
-echo "# === КОНЕЦ СБОРКИ ===" >> tmp/all.d2
+echo "" >> "$SCRIPT_DIR/tmp/all.d2"
+echo "# === КОНЕЦ СБОРКИ ===" >> "$SCRIPT_DIR/tmp/all.d2"
 
 # Создаем директорию для выходного файла если не существует
 mkdir -p "$(dirname "$OUTPUT_FILE")"
 
 # Генерируем PNG с ELK layout
 echo "🔄 Генерация PNG с ELK layout..."
-d2 --layout=elk --theme=300 tmp/all.d2 "$OUTPUT_FILE"
+d2 --layout=elk --theme=300 "$SCRIPT_DIR/tmp/all.d2" "$OUTPUT_FILE"
 
 # Проверяем успешность
 if [ $? -eq 0 ]; then
     echo "✅ Сборка завершена успешно!"
     echo "📁 Файлы:"
-    echo "   - Схема D2: tmp/all.d2"
+    echo "   - Схема D2: $SCRIPT_DIR/tmp/all.d2"
     echo "   - Изображение: $OUTPUT_FILE"
     echo ""
     echo "📊 Статистика:"
-    echo "   Размер D2 файла: $(wc -l < tmp/all.d2) строк"
+    echo "   Размер D2 файла: $(wc -l < "$SCRIPT_DIR/tmp/all.d2") строк"
     echo "   Модулей собрано: $MODULES_ADDED"
     if [[ "$FILTERS_ACTIVE" == "true" ]]; then
         echo "   Фильтры: ${INCLUDE_FILTERS[*]}"
