@@ -5,11 +5,17 @@
 
 set -e  # Выход при ошибке
 
-echo "🔌 Сборка схемы электропроводки..."
+# Функция для логирования с временем
+log() {
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[$timestamp] $1"
+}
+
+log "🔌 Сборка схемы электропроводки..."
 
 # Определяем директорию, где находится скрипт
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-echo "📁 Директория скрипта: $SCRIPT_DIR"
+log "📁 Директория скрипта: $SCRIPT_DIR"
 
 # Создаем временный каталог если не существует
 mkdir -p "$SCRIPT_DIR/tmp/electro-build"
@@ -17,7 +23,7 @@ mkdir -p "$SCRIPT_DIR/tmp/electro-build"
 # Проверяем существование основного файла
 MAIN_D2="$SCRIPT_DIR/main.d2"
 if [ ! -f "$MAIN_D2" ]; then
-    echo "❌ Ошибка: main.d2 не найден в $SCRIPT_DIR"
+    log "❌ Ошибка: main.d2 не найден в $SCRIPT_DIR"
     exit 1
 fi
 
@@ -42,7 +48,7 @@ while [[ $# -gt 0 ]]; do
                 FILTERS_ACTIVE=true
                 shift 2
             else
-                echo "❌ Ошибка: --include-files требует аргумент"
+                log "❌ Ошибка: --include-files требует аргумент"
                 exit 1
             fi
             ;;
@@ -51,7 +57,7 @@ while [[ $# -gt 0 ]]; do
                 OUTPUT_FILE="$2"
                 shift 2
             else
-                echo "❌ Ошибка: --output-file требует аргумент"
+                log "❌ Ошибка: --output-file требует аргумент"
                 exit 1
             fi
             ;;
@@ -64,11 +70,11 @@ done
 
 # Если указаны фильтры, выводим информацию
 if [[ ${#INCLUDE_FILTERS[@]} -gt 0 ]]; then
-    echo "🔍 Применены фильтры включения: ${INCLUDE_FILTERS[*]}"
+    log "🔍 Применены фильтры включения: ${INCLUDE_FILTERS[*]}"
 fi
 
 # Выводим информацию о выходном файле
-echo "📁 Выходной файл: $OUTPUT_FILE"
+log "📁 Выходной файл: $OUTPUT_FILE"
 
 # Функция для проверки Ant-style patterns
 matches_ant_pattern() {
@@ -120,36 +126,36 @@ should_include_file() {
 MODULES_ADDED=0
 
 MODULES_DIR="$SCRIPT_DIR/modules"
-echo "📂 Обрабатываем модули из: $MODULES_DIR"
-echo "📋 Все файлы: $(echo $MODULES_DIR/*.d2)"
+log "📂 Обрабатываем модули из: $MODULES_DIR"
+log "📋 Все файлы: $(echo $MODULES_DIR/*.d2)"
 
 # ВРЕМЕННО отключаем set -e для цикла
 set +e
 for module in $MODULES_DIR/*.d2; do
-    echo "🔄 Начало обработки: $module"
+    log "🔄 Начало обработки: $module"
     if [ -f "$module" ]; then
-        echo "🔍 Анализ модуля: $module"
+        log "🔍 Анализ модуля: $module"
         if should_include_file "$module"; then
-            echo "🎯 Файл соответствует фильтрам"
+            log "🎯 Файл соответствует фильтрам"
             echo "" >> "$SCRIPT_DIR/tmp/all.d2"
             echo "# Модуль: $(basename $module)" >> "$SCRIPT_DIR/tmp/all.d2"
-            echo "📖 Чтение содержимого..."
+            log "📖 Чтение содержимого..."
             cat "$module" >> "$SCRIPT_DIR/tmp/all.d2"
             CAT_EXIT_CODE=$?
-            echo "📖 Код выхода cat: $CAT_EXIT_CODE"
+            log "📖 Код выхода cat: $CAT_EXIT_CODE"
             if [ $CAT_EXIT_CODE -eq 0 ]; then
-                echo "✅ Добавлен модуль: $module"
+                log "✅ Добавлен модуль: $module"
                 ((MODULES_ADDED++))
             else
-                echo "❌ Ошибка при чтении $module (код: $CAT_EXIT_CODE)"
+                log "❌ Ошибка при чтении $module (код: $CAT_EXIT_CODE)"
             fi
         else
-            echo "⏭️  Пропущен модуль: $module (не соответствует фильтрам)"
+            log "⏭️  Пропущен модуль: $module (не соответствует фильтрам)"
         fi
     else
-        echo "📄 $module не является файлом"
+        log "📄 $module не является файлом"
     fi
-    echo "--- Конец обработки $module ---"
+    log "--- Конец обработки $module ---"
 done
 set -e  # Включаем обратно
 
@@ -160,23 +166,23 @@ echo "# === КОНЕЦ СБОРКИ ===" >> "$SCRIPT_DIR/tmp/all.d2"
 mkdir -p "$(dirname "$OUTPUT_FILE")"
 
 # Генерируем PNG с ELK layout
-echo "🔄 Генерация PNG с ELK layout..."
+log "🔄 Генерация PNG с ELK layout..."
 d2 --layout=elk --theme=300 "$SCRIPT_DIR/tmp/all.d2" "$OUTPUT_FILE"
 
 # Проверяем успешность
 if [ $? -eq 0 ]; then
-    echo "✅ Сборка завершена успешно!"
-    echo "📁 Файлы:"
-    echo "   - Схема D2: $SCRIPT_DIR/tmp/all.d2"
-    echo "   - Изображение: $OUTPUT_FILE"
-    echo ""
-    echo "📊 Статистика:"
-    echo "   Размер D2 файла: $(wc -l < "$SCRIPT_DIR/tmp/all.d2") строк"
-    echo "   Модулей собрано: $MODULES_ADDED"
+    log "✅ Сборка завершена успешно!"
+    log "📁 Файлы:"
+    log "   - Схема D2: $SCRIPT_DIR/tmp/all.d2"
+    log "   - Изображение: $OUTPUT_FILE"
+    log ""
+    log "📊 Статистика:"
+    log "   Размер D2 файла: $(wc -l < "$SCRIPT_DIR/tmp/all.d2") строк"
+    log "   Модулей собрано: $MODULES_ADDED"
     if [[ "$FILTERS_ACTIVE" == "true" ]]; then
-        echo "   Фильтры: ${INCLUDE_FILTERS[*]}"
+        log "   Фильтры: ${INCLUDE_FILTERS[*]}"
     fi
 else
-    echo "❌ Ошибка при генерации схемы"
+    log "❌ Ошибка при генерации схемы"
     exit 1
 fi
