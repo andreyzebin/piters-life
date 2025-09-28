@@ -301,3 +301,11 @@ main_panel: Главный щит {
   fire_rcd -> sockets_group.sockets_label
   fire_rcd -> ac_group.ac_label
 }
+
+network_hub: Коммутатор {
+ ups: Бесперебойник
+ network_switch: Сетевой коммутатор
+}
+
+network_hub.network_switch -> living.tv_sockets.socket_ethernet
+network_hub.network_switch -> living.tv_stand_sockets.socket_ethernet
