@@ -1,0 +1,152 @@
+# СХЕМА ЭЛЕКТРИЧЕСКОГО ЩИТА
+
+layout: elk
+direction: right
+
+electric_panel: Электрический щит {
+  shape: rectangle
+  style: {
+    stroke: "#333333"
+    fill: "#F5F5F5"
+    stroke-width: 3
+  }
+
+  # === ВВОДНАЯ ЧАСТЬ ===
+  input_section: {
+    shape: rectangle
+    style: {
+      stroke: "#D32F2F"
+      fill: "#FFEBEE"
+    }
+
+    relay: Реле
+    fire_rcd: УЗО пожарн. 63A 300мА {
+      style: {
+        bold: true
+      }
+    }
+    main_breaker: АВ C10
+    contactor: Контактор 63-20
+
+    relay -> fire_rcd
+    fire_rcd -> main_breaker
+    fire_rcd -> contactor
+  }
+
+  # === МАСТЕР-ВЫКЛЮЧАТЕЛЬ ===
+  master_switch_section: {
+    shape: rectangle
+    style: {
+      stroke: "#FF6F00"
+      fill: "#FFF3E0"
+    }
+
+    master_switch: "Мастер-выключатель | АВ C10"
+  }
+
+  # === ГРУППА 1: ЛИНИИ 2-11 ===
+  group1: {
+    shape: rectangle
+    style: {
+      stroke: "#1976D2"
+      fill: "#E3F2FD"
+    }
+
+    line2: "Линия 2: Бойлер [1000 Вт] Душ | АВДТ C16A 10мА"
+    line3: "Линия 3: Аквасторож [1000 Вт] Душ | АВДТ C10A 10мА"
+    line4: "Линия 4: Стиралка [2000 Вт] Кухня | АВДТ C16A 10мА"
+    line5: "Линия 5: Холодильник [500 Вт] Кухня | АВ C16"
+    line6: "Линия 6: Розетки+wifi [1000 Вт] Коридор | АВ C16"
+    line7: "Линия 7: ПММ+измельчитель [2000 Вт] Кухня | АВДТ C16A 10мА"
+    line8: "Линия 8: Розетки+сушило [1000 Вт] Ванна | АВДТ C16A 10мА"
+    line9: "Линия 9: Розетки+сушило [1000 Вт] Душ | АВДТ C16A 10мА"
+    line10: "Линия 10: Варочная [7000 Вт] Кухня | АВДТ C32A 30мА"
+    line11: "Линия 11: Кондиционер [1000 Вт] Коридор | АВДТ C16A 30мА"
+  }
+
+  # === ГРУППА 2: ЛИНИИ 20-26 (УЗО 63A 30мА) ===
+  group2: {
+    shape: rectangle
+    style: {
+      stroke: "#388E3C"
+      fill: "#E8F5E9"
+    }
+
+    group2_rcd: УЗО 63A 30мА {
+      style: {
+        bold: true
+        font-size: 14
+      }
+    }
+
+    line20: "Линия 20: Розетки+привод шторы [1000 Вт] Спальня | АВ C16"
+    line21: "Линия 21: Розетки [1000 Вт] Гардероб | АВ C16"
+    line22: "Линия 22: Розетки [1000 Вт] Кабинет | АВ C16"
+    line23: "Линия 23: Теплый пол [1000 Вт] Коридор | АВ C16"
+    line24: "Линия 24: Свет [500 Вт] Душ | АВ C10"
+    line25: "Линия 25: Свет [500 Вт] Коридор | АВ C10"
+    line26: "Линия 26: Свет [500 Вт] Кабинет | АВ C10"
+
+    group2_rcd -> line20
+    group2_rcd -> line21
+    group2_rcd -> line22
+    group2_rcd -> line23
+    group2_rcd -> line24
+    group2_rcd -> line25
+    group2_rcd -> line26
+  }
+
+  # === ГРУППА 3: ЛИНИИ 12-19 (УЗО 63A 30мА) ===
+  group3: {
+    shape: rectangle
+    style: {
+      stroke: "#7B1FA2"
+      fill: "#F3E5F5"
+    }
+
+    group3_rcd: УЗО 63A 30мА {
+      style: {
+        bold: true
+        font-size: 14
+      }
+    }
+
+    line12: "Линия 12: Фартук+вытяжка [3000 Вт] Кухня | АВ C16"
+    line13: "Линия 13: ДШ [2000 Вт] Кухня | АВ C16"
+    line14: "Линия 14: Розетки+привод штор [1000 Вт] Гостиная | АВ C16"
+    line15: "Линия 15: Свет [500 Вт] Кухня | АВ C10"
+    line16: "Линия 16: Свет [500 Вт] Спальня | АВ C10"
+    line17: "Линия 17: Свет [500 Вт] Гостиная | АВ C10"
+    line18: "Линия 18: Свет [500 Вт] Гардероб | АВ C10"
+    line19: "Линия 19: Свет [500 Вт] Ванна | АВ C10"
+
+    group3_rcd -> line12
+    group3_rcd -> line13
+    group3_rcd -> line14
+    group3_rcd -> line15
+    group3_rcd -> line16
+    group3_rcd -> line17
+    group3_rcd -> line18
+    group3_rcd -> line19
+  }
+
+  # Подключение групп к вводной части
+  # Мастер-выключатель идет к контактору через АВ C10
+  master_switch_section.master_switch -> input_section.contactor
+
+  # Группа 1 (линии 2-11) - каждая линия подключается напрямую к fire_rcd
+  input_section.fire_rcd -> group1.line2
+  input_section.fire_rcd -> group1.line3
+  input_section.fire_rcd -> group1.line4
+  input_section.fire_rcd -> group1.line5
+  input_section.fire_rcd -> group1.line6
+  input_section.fire_rcd -> group1.line7
+  input_section.fire_rcd -> group1.line8
+  input_section.fire_rcd -> group1.line9
+  input_section.fire_rcd -> group1.line10
+  input_section.fire_rcd -> group1.line11
+
+  # Группы 2 и 3 (линии 12-26) подключаются через контактор
+  input_section.contactor -> group2.group2_rcd
+  input_section.contactor -> group3.group3_rcd
+}

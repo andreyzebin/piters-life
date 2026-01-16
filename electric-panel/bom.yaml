@@ -1,0 +1,261 @@
+# BILL OF MATERIALS - ЭЛЕКТРИЧЕСКИЙ ЩИТ
+
+# === ВВОДНЫЕ УСТРОЙСТВА ===
+input_devices:
+  - name: Реле
+    type: Реле
+    quantity: 1
+    notes: "Реле для управления"
+
+  - name: УЗО пожарное
+    type: УЗО
+    rating: "63A 300мА"
+    quantity: 1
+    notes: "Противопожарное УЗО селективное"
+
+  - name: Автомат вводной
+    type: Автомат
+    rating: "C10"
+    quantity: 1
+    notes: "Вводной автоматический выключатель"
+
+  - name: Контактор
+    type: Контактор
+    rating: "63-20"
+    quantity: 1
+    notes: "Контактор модульный"
+
+  - name: Кросс-модуль
+    type: Кросс-модуль
+    rating: "4 полюса, 7 зажимов DIN-4"
+    quantity: 1
+    notes: "Распределительный кросс-модуль"
+
+# === АВТОМАТИЧЕСКИЕ ВЫКЛЮЧАТЕЛИ С УЗО (АВДТ) ===
+rcd_breakers:
+  - name: АВДТ C16A 10мА
+    type: Дифференциальный автомат
+    rating: "C16A 10мА"
+    quantity: 7
+    lines: [1, 2, 4, 7, 8, 9]
+    notes: "Автоматический выключатель с УЗО 10мА"
+
+  - name: АВДТ C10A 10мА
+    type: Дифференциальный автомат
+    rating: "C10A 10мА"
+    quantity: 1
+    lines: [3]
+    notes: "Автоматический выключатель с УЗО 10мА"
+
+  - name: АВДТ C32A 30мА
+    type: Дифференциальный автомат
+    rating: "C32A 30мА"
+    quantity: 1
+    lines: [10]
+    notes: "Автоматический выключатель с УЗО 30мА для варочной панели"
+
+  - name: АВДТ C16A 30мА
+    type: Дифференциальный автомат
+    rating: "C16A 30мА"
+    quantity: 1
+    lines: [11]
+    notes: "Автоматический выключатель с УЗО 30мА"
+
+# === УЗО ГРУППОВЫЕ ===
+group_rcds:
+  - name: УЗО 63A 30мА
+    type: УЗО
+    rating: "63A 30мА"
+    quantity: 2
+    groups: ["Группа 2 (линии 12-19)", "Группа 3 (линии 20-26)"]
+    notes: "УЗО для групп потребителей"
+
+# === АВТОМАТИЧЕСКИЕ ВЫКЛЮЧАТЕЛИ (АВ) ===
+circuit_breakers:
+  - name: АВ C16
+    type: Автоматический выключатель
+    rating: "C16"
+    quantity: 13
+    lines: [5, 6, 12, 13, 14, 20, 21, 22, 23]
+    notes: "Автоматический выключатель 16А"
+
+  - name: АВ C10
+    type: Автоматический выключатель
+    rating: "C10"
+    quantity: 9
+    lines: [15, 16, 17, 18, 19, 24, 25, 26]
+    notes: "Автоматический выключатель 10А для освещения"
+
+# === ОТХОДЯЩИЕ ЛИНИИ ===
+circuits:
+  - line: 1
+    consumer: Мастер-выключатель
+    room: ""
+    power: ""
+    breaker: "АВДТ C16A 10мА"
+
+  - line: 2
+    consumer: Бойлер
+    room: Душ
+    power: "1000 Вт"
+    breaker: "АВДТ C16A 10мА"
+
+  - line: 3
+    consumer: Аквасторож
+    room: Душ
+    power: "1000 Вт"
+    breaker: "АВДТ C10A 10мА"
+
+  - line: 4
+    consumer: Стиралка
+    room: Кухня
+    power: "2000 Вт"
+    breaker: "АВДТ C16A 10мА"
+
+  - line: 5
+    consumer: Холодильник
+    room: Кухня
+    power: "500 Вт"
+    breaker: "АВ C16"
+
+  - line: 6
+    consumer: Розетки+wifi
+    room: Коридор
+    power: "1000 Вт"
+    breaker: "АВ C16"
+
+  - line: 7
+    consumer: ПММ+измельчитель
+    room: Кухня
+    power: "2000 Вт"
+    breaker: "АВДТ C16A 10мА"
+
+  - line: 8
+    consumer: Розетки+сушило
+    room: Ванна
+    power: "1000 Вт"
+    breaker: "АВДТ C16A 10мА"
+
+  - line: 9
+    consumer: Розетки+сушило
+    room: Душ
+    power: "1000 Вт"
+    breaker: "АВДТ C16A 10мА"
+
+  - line: 10
+    consumer: Варочная
+    room: Кухня
+    power: "7000 Вт"
+    breaker: "АВДТ C32A 30мА"
+
+  - line: 11
+    consumer: Кондиционер
+    room: Коридор
+    power: "1000 Вт"
+    breaker: "АВДТ C16A 30мА"
+
+  - line: 12
+    consumer: Фартук+вытяжка
+    room: Кухня
+    power: "3000 Вт"
+    breaker: "АВ C16"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 13
+    consumer: ДШ
+    room: Кухня
+    power: "2000 Вт"
+    breaker: "АВ C16"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 14
+    consumer: Розетки+привод штор
+    room: Гостиная
+    power: "1000 Вт"
+    breaker: "АВ C16"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 15
+    consumer: Свет
+    room: Кухня
+    power: "500 Вт"
+    breaker: "АВ C10"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 16
+    consumer: Свет
+    room: Спальня
+    power: "500 Вт"
+    breaker: "АВ C10"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 17
+    consumer: Свет
+    room: Гостиная
+    power: "500 Вт"
+    breaker: "АВ C10"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 18
+    consumer: Свет
+    room: Гардероб
+    power: "500 Вт"
+    breaker: "АВ C10"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 19
+    consumer: Свет
+    room: Ванна
+    power: "500 Вт"
+    breaker: "АВ C10"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 20
+    consumer: Розетки+привод шторы
+    room: Спальня
+    power: "1000 Вт"
+    breaker: "АВ C16"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 21
+    consumer: Розетки
+    room: Гардероб
+    power: "1000 Вт"
+    breaker: "АВ C16"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 22
+    consumer: Розетки
+    room: Кабинет
+    power: "1000 Вт"
+    breaker: "АВ C16"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 23
+    consumer: Теплый пол
+    room: Коридор
+    power: "1000 Вт"
+    breaker: "АВ C16"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 24
+    consumer: Свет
+    room: Душ
+    power: "500 Вт"
+    breaker: "АВ C10"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 25
+    consumer: Свет
+    room: Коридор
+    power: "500 Вт"
+    breaker: "АВ C10"
+    rcd_group: "УЗО 63A 30мА"
+
+  - line: 26
+    consumer: Свет
+    room: Кабинет
+    power: "500 Вт"
+    breaker: "АВ C10"
+    rcd_group: "УЗО 63A 30мА"
+
