@@ -1,6 +1,5 @@
 # СХЕМА ЭЛЕКТРИЧЕСКОГО ЩИТА
 
-layout: elk
 direction: right
 
 electric_panel: Электрический щит {
@@ -25,11 +24,9 @@ electric_panel: Электрический щит {
         bold: true
       }
     }
-    main_breaker: АВ C10
     contactor: Контактор 63-20
 
     relay -> fire_rcd
-    fire_rcd -> main_breaker
     fire_rcd -> contactor
   }
 
@@ -44,7 +41,7 @@ electric_panel: Электрический щит {
     master_switch: "Мастер-выключатель | АВ C10"
   }
 
-  # === ГРУППА 1: ЛИНИИ 2-11 ===
+  # === ГРУППА 1: ЛИНИИ 2-6 ===
   group1: {
     shape: rectangle
     style: {
@@ -55,8 +52,18 @@ electric_panel: Электрический щит {
     line2: "Линия 2: Бойлер [1000 Вт] Душ | АВДТ C16A 10мА"
     line3: "Линия 3: Аквасторож [1000 Вт] Душ | АВДТ C10A 10мА"
     line4: "Линия 4: Стиралка [2000 Вт] Кухня | АВДТ C16A 10мА"
-    line5: "Линия 5: Холодильник [500 Вт] Кухня | АВ C16"
-    line6: "Линия 6: Розетки+wifi [1000 Вт] Коридор | АВ C16"
+    line5: "Линия 5: Холодильник [500 Вт] Кухня | АВДТ C16A 30мА"
+    line6: "Линия 6: Розетки+wifi [1000 Вт] Коридор | АВДТ C16A 30мА"
+  }
+
+  # === ГРУППА 4: ЛИНИИ 7-11 ===
+  group4: {
+    shape: rectangle
+    style: {
+      stroke: "#1976D2"
+      fill: "#E3F2FD"
+    }
+
     line7: "Линия 7: ПММ+измельчитель [2000 Вт] Кухня | АВДТ C16A 10мА"
     line8: "Линия 8: Розетки+сушило [1000 Вт] Ванна | АВДТ C16A 10мА"
     line9: "Линия 9: Розетки+сушило [1000 Вт] Душ | АВДТ C16A 10мА"
@@ -140,11 +147,12 @@ electric_panel: Электрический щит {
   input_section.fire_rcd -> group1.line4
   input_section.fire_rcd -> group1.line5
   input_section.fire_rcd -> group1.line6
-  input_section.fire_rcd -> group1.line7
-  input_section.fire_rcd -> group1.line8
-  input_section.fire_rcd -> group1.line9
-  input_section.fire_rcd -> group1.line10
-  input_section.fire_rcd -> group1.line11
+
+  input_section.contactor -> group4.line7
+  input_section.contactor -> group4.line8
+  input_section.contactor -> group4.line9
+  input_section.contactor -> group4.line10
+  input_section.contactor -> group4.line11
 
   # Группы 2 и 3 (линии 12-26) подключаются через контактор
   input_section.contactor -> group2.group2_rcd
